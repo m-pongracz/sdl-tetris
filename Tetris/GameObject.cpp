@@ -27,13 +27,13 @@ void GameObject::RotateCCW() {
 	rotateFootprint();
 }
 void GameObject::MoveL() {
-	if (x_ > 0) --x_;
+	--x_;
 }
 void GameObject::MoveR() {
-	if (x_ < 8) ++x_;
+	++x_;
 }
 void GameObject::MoveD() {
-	if (y_ < 12) ++y_;
+	++y_;
 }
 
 void GameObject::makeFootprint() {

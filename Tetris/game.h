@@ -36,6 +36,7 @@ private:
 	SDL_Texture *gridBox;
 	int windowHeight_;
 	int windowWidth_;
-
+	int getRandomNumber_(int min, int max);
+	bool canCubeGoDown_();
 };
 #endif

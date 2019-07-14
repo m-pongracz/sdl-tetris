@@ -1,0 +1,19 @@
+﻿  Game.cpp
+d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\dev\c++\sdl\tetris\tetris\gamelogic\game.cpp(68): warning C4244: '=': conversion from '_Rep' to 'int', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
+d:\dev\c++\sdl\tetris\tetris\gamelogic\game.cpp(130): warning C4244: 'argument': conversion from '_Rep' to 'unsigned int', possible loss of data
+          with
+          [
+              _Rep=__int64
+          ]
+  Input.cpp
+d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\dev\c++\sdl\tetris\tetris\gamelogic\input.cpp(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  Generating Code...
+  GameLogic.vcxproj -> D:\Dev\c++\sdl\tetris\Tetris\x64\Debug\GameLogic.lib

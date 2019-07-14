@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tetris", "Tetris\Tetris.vcxproj", "{C6B8D07F-A606-4ADD-828D-5C7022B3603D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameLogic", "GameLogic\GameLogic.vcxproj", "{7FB3183D-E8AF-430A-A0A3-9B03984298B6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TetrisRendering", "TetrisRendering\TetrisRendering.vcxproj", "{04767720-9F6F-480D-8B71-EFB2F9F28AE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +27,30 @@ Global
 		{C6B8D07F-A606-4ADD-828D-5C7022B3603D}.Release|x64.Build.0 = Release|x64
 		{C6B8D07F-A606-4ADD-828D-5C7022B3603D}.Release|x86.ActiveCfg = Release|Win32
 		{C6B8D07F-A606-4ADD-828D-5C7022B3603D}.Release|x86.Build.0 = Release|Win32
+		{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}.Debug|x64.ActiveCfg = Debug|x64
+		{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}.Debug|x64.Build.0 = Debug|x64
+		{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}.Debug|x86.ActiveCfg = Debug|Win32
+		{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}.Debug|x86.Build.0 = Debug|Win32
+		{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}.Release|x64.ActiveCfg = Release|x64
+		{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}.Release|x64.Build.0 = Release|x64
+		{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}.Release|x86.ActiveCfg = Release|Win32
+		{DB6B5ED3-1FD9-4208-B29F-9008D1AC0AB8}.Release|x86.Build.0 = Release|Win32
+		{7FB3183D-E8AF-430A-A0A3-9B03984298B6}.Debug|x64.ActiveCfg = Debug|x64
+		{7FB3183D-E8AF-430A-A0A3-9B03984298B6}.Debug|x64.Build.0 = Debug|x64
+		{7FB3183D-E8AF-430A-A0A3-9B03984298B6}.Debug|x86.ActiveCfg = Debug|Win32
+		{7FB3183D-E8AF-430A-A0A3-9B03984298B6}.Debug|x86.Build.0 = Debug|Win32
+		{7FB3183D-E8AF-430A-A0A3-9B03984298B6}.Release|x64.ActiveCfg = Release|x64
+		{7FB3183D-E8AF-430A-A0A3-9B03984298B6}.Release|x64.Build.0 = Release|x64
+		{7FB3183D-E8AF-430A-A0A3-9B03984298B6}.Release|x86.ActiveCfg = Release|Win32
+		{7FB3183D-E8AF-430A-A0A3-9B03984298B6}.Release|x86.Build.0 = Release|Win32
+		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Debug|x64.ActiveCfg = Debug|x64
+		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Debug|x64.Build.0 = Debug|x64
+		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Debug|x86.ActiveCfg = Debug|Win32
+		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Debug|x86.Build.0 = Debug|Win32
+		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Release|x64.ActiveCfg = Release|x64
+		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Release|x64.Build.0 = Release|x64
+		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Release|x86.ActiveCfg = Release|Win32
+		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

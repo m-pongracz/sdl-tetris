@@ -1,11 +1,4 @@
-﻿  Game.cpp
-d:\dev\c++\sdl\tetris\tetris\tetris\game.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\dev\c++\sdl\tetris\tetris\tetris\game_object.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\dev\c++\sdl\tetris\tetris\tetris\game.cpp(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\dev\c++\sdl\tetris\tetris\tetris\game.cpp(180): warning C4244: 'argument': conversion from '_Rep' to 'unsigned int', possible loss of data
-          with
-          [
-              _Rep=__int64
-          ]
-d:\dev\c++\sdl\tetris\tetris\tetris\game.cpp(71): warning C4172: returning address of local variable or temporary: cube
+﻿  Source.cpp
+d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   Tetris.vcxproj -> D:\Dev\c++\sdl\tetris\Tetris\x64\Debug\Tetris.exe

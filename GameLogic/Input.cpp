@@ -3,20 +3,23 @@
 #include "game.h"
 #include <SDL.h>;
 
-void Input::pollForCubeMovement(GameObject *cube) {
+void Input::pollForCubeMovement(Game *game, void(Game::*mdPtr)(), void(Game::*mlPtr)(), void(Game::*mrPtr)(), void(Game::*rotatePtr)()) {
 	GameLogic gameLogic = *new GameLogic(Game::gridHeight, Game::gridWidth);
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_KEYDOWN) {
 			switch (e.key.keysym.sym) {
 			case SDLK_LEFT:
-				if (gameLogic.canCubeGoLeft_(*cube)) cube->MoveL();
+				(game->*mlPtr)();
 				break;
 			case SDLK_RIGHT:
-				if (gameLogic.canCubeGoRight_(*cube)) cube->MoveR();
+				(game->*mrPtr)();
 				break;
 			case SDLK_DOWN:
-				if (gameLogic.canCubeGoDown_(*cube)) cube->MoveD();
+				(game->*mdPtr)();
+				break;
+			case SDLK_UP:
+				(game->*rotatePtr)();
 				break;
 			default:
 				break;

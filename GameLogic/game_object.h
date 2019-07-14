@@ -35,7 +35,8 @@ public:
 	static int index(int x, int y);
 	int getFootprintBoundaryX();
 	int getFootprintBoundaryY();
-
+	void setX(int x);
+	void setY(int y);
 private:
 	std::vector<std::vector<bool>> footprint_;
 	CubeType type_;

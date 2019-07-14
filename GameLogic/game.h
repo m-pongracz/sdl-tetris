@@ -5,6 +5,9 @@
 #include <SDL.h>
 #include "../TetrisRendering/tetris_rendering.h"
 #include "game_logic.h"
+
+enum direction { left, right, down };
+
 class Game
 {
 public:
@@ -42,4 +45,11 @@ private:
 	GameLogic gameLogic_;
 	TetrisRendering *renderer_;
 	void MoveCubeDown();
+	void MoveCubeLeft();
+	void MoveCubeRight();
+	void RotateCube();
+	std::vector<std::vector<int>> PrevCubePosCleanup();
+	bool cubeInDirection(direction dir);
+	void imprintPositionsOnGrid(std::vector<std::vector<int>> positions);
+};
 #endif

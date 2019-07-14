@@ -1,4 +1,1 @@
-﻿  Source.cpp
-d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Tetris.vcxproj -> D:\Dev\c++\sdl\tetris\Tetris\x64\Debug\Tetris.exe
+﻿  Tetris.vcxproj -> D:\Dev\c++\sdl\tetris\Tetris\x64\Debug\Tetris.exe

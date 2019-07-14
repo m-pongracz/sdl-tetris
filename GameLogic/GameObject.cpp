@@ -92,6 +92,12 @@ void GameObject::rotateFootprint() {
 
 	for (int x = 0; x < fprintRows; x++) {
 		for (int y = 0; y < fprintCols; y++) {
+			tempArr[x][y] = footprint_[x][y];
+		}
+	}
+
+	for (int x = 0; x < fprintRows; x++) {
+		for (int y = 0; y < fprintCols; y++) {
 			footprint_[x][y] = tempArr[y][x];
 		}
 	}
@@ -127,4 +133,12 @@ int GameObject::getFootprintBoundaryY() {
 	}
 
 	return firstTruePosY;
+}
+
+void GameObject::setX(int x) {
+	x_ = x;
+}
+
+void GameObject::setY(int y) {
+	y_ = y;
 }

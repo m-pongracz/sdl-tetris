@@ -6,7 +6,7 @@
 #include "../TetrisRendering/tetris_rendering.h"
 #include "game_logic.h"
 
-enum direction { left, right, down };
+enum direction { left, right, down, current };
 
 class Game
 {

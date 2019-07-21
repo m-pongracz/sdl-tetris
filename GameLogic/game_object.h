@@ -4,7 +4,8 @@
 #include <utility>;
 #include <vector>;
 
-
+enum lrDirection { dLeft, dRight };
+enum tbDirection { dTop, dBottom };
 enum CubeType { Cube, Line, L, ReverseL, S, ReverseS, T };
 
 class GameObject
@@ -32,9 +33,9 @@ public:
 	void MoveL();
 	void MoveR();
 	void MoveD();
-	static int index(int x, int y);
-	int getFootprintBoundaryX();
-	int getFootprintBoundaryY();
+	int index(int x, int y);
+	int getFootprintBoundaryX(lrDirection dir);
+	int getFootprintBoundaryY(tbDirection dir);
 	void setX(int x);
 	void setY(int y);
 private:
@@ -44,7 +45,7 @@ private:
 	int y_;
 	int rotation_;
 	void makeFootprint();
-	void rotateFootprint();	
+	void rotateFootprint();
 };
 
 #endif

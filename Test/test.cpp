@@ -6,31 +6,31 @@
 TEST(GridLogicTest, FootprintActualSizeX) {
 
 	GameObject cube(CubeType::Cube);
-	EXPECT_EQ(1, cube.getFootprintBoundaryX());
+	EXPECT_EQ(1, cube.getFootprintBoundaryX(lrDirection::dRight));
 	std::cerr << "cube succ" << std::endl;
 
 	GameObject line(CubeType::Line);
-	EXPECT_EQ(0, line.getFootprintBoundaryX());
+	EXPECT_EQ(0, line.getFootprintBoundaryX(lrDirection::dRight));
 	std::cerr << "line succ" << std::endl;
 
 	GameObject l(CubeType::L);
-	EXPECT_EQ(1, l.getFootprintBoundaryX());
+	EXPECT_EQ(1, l.getFootprintBoundaryX(lrDirection::dRight));
 	std::cerr << "l succ" << std::endl;
 
 	GameObject reverseL(CubeType::ReverseL);
-	EXPECT_EQ(1, reverseL.getFootprintBoundaryX());
+	EXPECT_EQ(1, reverseL.getFootprintBoundaryX(lrDirection::dRight));
 	std::cerr << "reverseL succ" << std::endl;
 
 	GameObject s(CubeType::S);
-	EXPECT_EQ(2, s.getFootprintBoundaryX());
+	EXPECT_EQ(2, s.getFootprintBoundaryX(lrDirection::dRight));
 	std::cerr << "s succ" << std::endl;
 
 	GameObject reverseS(CubeType::ReverseS);
-	EXPECT_EQ(2, reverseS.getFootprintBoundaryX());
+	EXPECT_EQ(2, reverseS.getFootprintBoundaryX(lrDirection::dRight));
 	std::cerr << "reverseS succ" << std::endl;
 
 	GameObject t(CubeType::T);
-	EXPECT_EQ(2, t.getFootprintBoundaryX());
+	EXPECT_EQ(2, t.getFootprintBoundaryX(lrDirection::dRight));
 	std::cerr << "t succ" << std::endl;
 
 }
@@ -38,31 +38,31 @@ TEST(GridLogicTest, FootprintActualSizeX) {
 TEST(GridLogicTest, FootprintActualSizeY) {
 
 	GameObject cube(CubeType::Cube);
-	EXPECT_EQ(1, cube.getFootprintBoundaryY());
+	EXPECT_EQ(1, cube.getFootprintBoundaryY(tbDirection::dBottom));
 	std::cerr << "cube succ" << std::endl;
 
 	GameObject line(CubeType::Line);
-	EXPECT_EQ(3, line.getFootprintBoundaryY());
+	EXPECT_EQ(3, line.getFootprintBoundaryY(tbDirection::dBottom));
 	std::cerr << "line succ" << std::endl;
 
 	GameObject l(CubeType::L);
-	EXPECT_EQ(2, l.getFootprintBoundaryY());
+	EXPECT_EQ(2, l.getFootprintBoundaryY(tbDirection::dBottom));
 	std::cerr << "l succ" << std::endl;
 
 	GameObject reverseL(CubeType::ReverseL);
-	EXPECT_EQ(2, reverseL.getFootprintBoundaryY());
+	EXPECT_EQ(2, reverseL.getFootprintBoundaryY(tbDirection::dBottom));
 	std::cerr << "reverseL succ" << std::endl;
 
 	GameObject s(CubeType::S);
-	EXPECT_EQ(1, s.getFootprintBoundaryY());
+	EXPECT_EQ(1, s.getFootprintBoundaryY(tbDirection::dBottom));
 	std::cerr << "s succ" << std::endl;
 
 	GameObject reverseS(CubeType::ReverseS);
-	EXPECT_EQ(1, reverseS.getFootprintBoundaryY());
+	EXPECT_EQ(1, reverseS.getFootprintBoundaryY(tbDirection::dBottom));
 	std::cerr << "reverseS succ" << std::endl;
 
 	GameObject t(CubeType::T);
-	EXPECT_EQ(1, t.getFootprintBoundaryY());
+	EXPECT_EQ(1, t.getFootprintBoundaryY(tbDirection::dBottom));
 	std::cerr << "t succ" << std::endl;
 }
 

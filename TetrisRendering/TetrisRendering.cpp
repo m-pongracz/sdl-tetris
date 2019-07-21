@@ -56,7 +56,7 @@ void TetrisRendering::RenderFrame(std::vector<std::vector<bool>> grid) {
 	for (int x = 0; x < Game::gridWidth; ++x) {
 		for (int y = 0; y < Game::gridHeight; ++y) {
 			sdlHelper_->renderTexture(gridBox, ren, x * 20, y * 20, 20, 20);
-			if (grid[x][y] == true) {
+			if (grid[y][x] == true) {
 				sdlHelper_->renderTexture(cube, ren, x * 20, y * 20, 20, 20);
 			}
 		}

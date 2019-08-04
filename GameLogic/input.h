@@ -7,7 +7,14 @@
 class Input
 {
 public:
-	static void pollForCubeMovement(Game *game, void(Game::*mdPtr)(), void(Game::*mlPtr)(), void(Game::*mrPtr)(), void(Game::*rotatePtr)());
+	static void pollForCubeMovement(
+		Game *game, 
+		void(Game::*mdPtr)(), 
+		void(Game::*mlPtr)(), 
+		void(Game::*mrPtr)(), 
+		void(Game::*rotatePtr)(),
+		void(Game::*rushDownPtr)()
+	);
 	
 };
 

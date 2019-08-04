@@ -16,15 +16,15 @@ GameObject::GameObject(CubeType type)
 	makeFootprint();
 }
 void GameObject::RotateCW() {
-	++rotation_;
-	if (rotation_ == 4) rotation_ = 0;
-	rotateFootprint();
+	if (rotation_ == 0) rotation_ = 3;
+	else --rotation_;
+	//rotateFootprint();
 }
 
 void GameObject::RotateCCW() {
-	--rotation_;
-	if (rotation_ == 0) rotation_ = 4;
-	rotateFootprint();
+	if (rotation_ == 3) rotation_ = 0;
+	else ++rotation_;
+	rotateFootprintCCW();
 }
 void GameObject::MoveL() {
 	--x_;
@@ -89,19 +89,19 @@ void GameObject::makeFootprint() {
 		footprint_[1][2] = true;
 		break;
 	case Line:
-		footprint_.resize(4, std::vector<bool>(1, false));
+		footprint_.resize(4, std::vector<bool>(3, false));
 
-		footprint_[0][0] = true;
-		footprint_[1][0] = true;
-		footprint_[2][0] = true;
-		footprint_[3][0] = true;
+		footprint_[0][1] = true;
+		footprint_[1][1] = true;
+		footprint_[2][1] = true;
+		footprint_[3][1] = true;
 		break;
 
 	}
 
 }
 
-void GameObject::rotateFootprint() {
+void GameObject::rotateFootprintCCW() {
 
 	std::vector<std::vector<bool>> tempArr;
 	tempArr.resize(footprint_[0].size(), std::vector<bool>(footprint_.size(), false));
@@ -115,7 +115,7 @@ void GameObject::rotateFootprint() {
 				else {
 					tempArr[(fprintRows - 1) - y - 1][(fprintCols - 1) - x - 1] = footprint_[x][y];
 				}*/
-				tempArr[(tempArr.size() - 1) - y][x] = footprint_[x][y];
+				tempArr[y][(tempArr[0].size() - 1) - x] = footprint_[x][y];
 			}
 		}
 	}
@@ -154,12 +154,12 @@ int GameObject::getFootprintBoundaryX(lrDirection dir) {
 	}
 	else if (dir == lrDirection::dLeft) {
 		firstTruePosX = footprint_[0].size();
-		for (int x = 0; x <= footprint_.size() - 1; ++x) {
-			int tempRes = 0;
+		for (int y = 0; y <= footprint_.size() - 1; ++y) {
+			int tempRes = footprint_[0].size();
 			bool trueFound = false;
-			for (int y = 0; y <= footprint_[0].size() - 1 && !trueFound; ++y) {
-				if (footprint_[x][y] == true) {
-					firstTruePosX = x;
+			for (int x = 0; x <= footprint_[0].size() - 1 && !trueFound; ++x) {
+				if (footprint_[y][x] == true) {
+					tempRes = x;
 					trueFound = true;
 				}
 			}
@@ -175,26 +175,16 @@ int GameObject::getFootprintBoundaryX(lrDirection dir) {
 }
 
 int GameObject::getFootprintBoundaryY(tbDirection dir) {
-	int firstTruePosY = -1;
+
 	if (dir == tbDirection::dBottom) {
-		for (int y = footprint_.size() - 1; y >= 0 && firstTruePosY == -1; --y) {
-			int tempRes = 0;
-			bool trueFound = false;
-			for (int x = footprint_[0].size() - 1; x >= 0 && firstTruePosY == -1; --x) {
+		int firstTruePosY = -1;
+		bool trueFound = false;
+		for (int y = footprint_.size() - 1; y >= 0 && !trueFound; --y) {
+			int tempRes = -1;
+
+			for (int x = footprint_[0].size() - 1; x >= 0 && !trueFound; --x) {
 				if (footprint_[y][x] == true) {
-					firstTruePosY = y;
-					trueFound = true;
-				}
-			}
-		}
-	}
-	if (dir == tbDirection::dTop) {
-		for (int y = 0; y <= footprint_.size() - 1; ++y) {
-			int tempRes = 0;
-			bool trueFound = false;
-			for (int x = 0; x <= footprint_[0].size() - 1 && !trueFound; ++x) {
-				if (footprint_[y][x] == true) {
-					firstTruePosY = y;
+					tempRes = y;
 					trueFound = true;
 				}
 			}
@@ -202,9 +192,25 @@ int GameObject::getFootprintBoundaryY(tbDirection dir) {
 				firstTruePosY = tempRes;
 			}
 		}
+		return firstTruePosY;
 	}
-
-	return firstTruePosY;
+	if (dir == tbDirection::dTop) {
+		int firstTruePosY = footprint_.size();
+		bool trueFound = false;
+		for (int y = 0; y <= footprint_.size() - 1 && !trueFound; ++y) {
+			int tempRes = footprint_.size();
+			for (int x = 0; x <= footprint_[0].size() - 1 && !trueFound; ++x) {
+				if (footprint_[y][x] == true) {
+					tempRes = y;
+					trueFound = true;
+				}
+			}
+			if (tempRes < firstTruePosY) {
+				firstTruePosY = tempRes;
+			}
+		}
+		return firstTruePosY;
+	}
 }
 
 void GameObject::setX(int x) {

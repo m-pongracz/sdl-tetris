@@ -4,15 +4,18 @@
 #include <string>
 #include <SDL.h>
 #include "logging.h"
+#include "SDL_ttf.h"
+#include "res_path.h"
 
 class SdlHelper
 {
 public:
-	SdlHelper();
 	SdlHelper(Logging *_logger);
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 	void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SDL_Rect *clip = nullptr, bool tile = false);
 	void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, SDL_Rect *clip = nullptr, bool tile = false);
+	void renderText(SDL_Renderer *ren, const std::string &message, SDL_Color color, int fontSize);
+	TTF_Font *font;
 };
 
 template<typename T, typename... Args>

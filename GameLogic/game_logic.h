@@ -2,6 +2,7 @@
 #define GAMELOGIC_H
 
 #include "game_object.h"
+#include "config.h"
 
 class GameLogic
 {
@@ -10,6 +11,7 @@ public:
 	bool canCubeGoDown_(GameObject &cube);
 	bool canCubeGoLeft_(GameObject &cube);
 	bool canCubeGoRight_(GameObject &cube);
+	bool canCubeBeRotatedCW(GameObject &cube);
 private:
 	int gridHeight_;
 	int gridWidth_;

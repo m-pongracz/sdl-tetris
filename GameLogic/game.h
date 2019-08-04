@@ -5,51 +5,53 @@
 #include <SDL.h>
 #include "../TetrisRendering/tetris_rendering.h"
 #include "game_logic.h"
-
-enum direction { left, right, down, current };
+#include "config.h"
 
 class Game
 {
 public:
-	static const int gridWidth = 8;
-	static const int gridHeight = 14;
+	static const int gridWidth = Config::gridWidth;
+	static const int gridHeight = Config::gridHeight;
 	Game(TetrisRendering* renderer);
 	~Game();
 	std::vector<std::vector<bool>> grid;
-	auto score() const& -> const int& { return score_; };
-	auto score() & -> const int& { return score_; };
-	auto currentCube() const& -> const GameObject& { return currentCube_; };
-	auto currentCube() & -> const GameObject& { return currentCube_; };
-	void start();
-	void stop();
-	void pause();
-	void resume();
-	auto running() const& -> const bool& { return running_; };
-	auto running() & -> const bool& { return running_; };
-	auto quit() const& -> const bool& { return quit_; };
-	auto quit() & -> const bool& { return quit_; };
-	int test();
+	auto score() const& -> const int& { return _score; };
+	auto score() & -> const int& { return _score; };
+	auto currentCube() const& -> const GameObject& { return _currentCube; };
+	auto currentCube() & -> const GameObject& { return _currentCube; };
+	void Start();
+	void Stop();
+	void Pause();
+	void Resume();
+	auto Running() const& -> const bool& { return _running; };
+	auto Running() & -> const bool& { return _running; };
+	auto Quit() const& -> const bool& { return _quit; };
+	auto Quit() & -> const bool& { return _quit; };
+	int Test();
 private:
-	int score_;
-	GameObject currentCube_;
-	GameObject getRandomCube_();
-	void getNextCube_();
-	void mainLoop_();
-	void startMainLoop_();
-	bool running_;
-	bool quit_;
-	void draw_();
-	int windowHeight_;
-	int windowWidth_;
-	int getRandomNumber_(int min, int max);
-	GameLogic gameLogic_;
-	TetrisRendering *renderer_;
-	void MoveCubeDown();
-	void MoveCubeLeft();
-	void MoveCubeRight();
-	void RotateCube();
-	std::vector<std::vector<int>> PrevCubePosCleanup();
-	bool cubeInDirection(direction dir);
+	int _score;
+	GameObject _currentCube;
+	GameObject getRandomCube();
+	void getNextCube();
+	void mainLoop();
+	void startMainLoop();
+	bool _running;
+	bool _quit;
+	void draw();
+	int _windowHeight;
+	int _windowWidth;
+	int getRandomNumber(int min, int max);
+	GameLogic _gameLogic;
+	TetrisRendering *_renderer;
+	void moveCubeDown();
+	void moveCubeLeft();
+	void moveCubeRight();
+	void rotateCube();
+	void rushCubeDown();
+	std::vector<std::vector<int>> prevCubePosCleanup();
+	bool cubeOnNewPosition(GameObject cube);
 	void imprintPositionsOnGrid(std::vector<std::vector<int>> positions);
+	void deleteCompleteRows();
+
 };
 #endif

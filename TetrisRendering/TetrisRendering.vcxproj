@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="color.h" />
     <ClInclude Include="logging.h" />
     <ClInclude Include="res_path.h" />
     <ClInclude Include="sdl_helper.h" />

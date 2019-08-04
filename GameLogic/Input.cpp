@@ -3,7 +3,15 @@
 #include "game.h"
 #include <SDL.h>;
 
-void Input::pollForCubeMovement(Game *game, void(Game::*mdPtr)(), void(Game::*mlPtr)(), void(Game::*mrPtr)(), void(Game::*rotatePtr)()) {
+void Input::pollForCubeMovement(
+	Game *game, 
+	void(Game::*mdPtr)(), 
+	void(Game::*mlPtr)(), 
+	void(Game::*mrPtr)(), 
+	void(Game::*rotatePtr)(),
+	void(Game::*rushDownPtr)()
+
+) {
 	GameLogic gameLogic = *new GameLogic(Game::gridHeight, Game::gridWidth);
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
@@ -20,6 +28,9 @@ void Input::pollForCubeMovement(Game *game, void(Game::*mdPtr)(), void(Game::*ml
 				break;
 			case SDLK_UP:
 				(game->*rotatePtr)();
+				break;
+			case SDLK_SPACE:
+				(game->*rushDownPtr)();
 				break;
 			default:
 				break;

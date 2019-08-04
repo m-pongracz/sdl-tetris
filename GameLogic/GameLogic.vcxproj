@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_logic.h" />
     <ClInclude Include="game_object.h" />

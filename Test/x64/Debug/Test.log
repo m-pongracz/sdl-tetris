@@ -1,5 +1,0 @@
-﻿cl : Command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
-  test.cpp
-d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-d:\dev\c++\sdl\tetris\tetris\gamelogic\game_object.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Test.vcxproj -> D:\Dev\c++\sdl\tetris\Tetris\x64\Debug\Test.exe

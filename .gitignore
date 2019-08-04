@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+*.enc
+*.tlog
+*.log
+*.idb
+*.ipch
+*.ipch
+*.ipch

@@ -4,16 +4,16 @@
 #include <string>
 #include <SDL_image.h>
 
+
 Logging *logger;
-
-
-SdlHelper::SdlHelper()
-{
-}
 
 
 SdlHelper::SdlHelper(Logging *_logger)
 {
+	const std::string fontPath = getResourcePath("fonts") + "arial.ttf";
+
+	font = TTF_OpenFont(fontPath.c_str(), 48);
+
 	logger = _logger;
 }
 
@@ -78,4 +78,33 @@ void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 	int w, h;
 	SDL_QueryTexture(tex, NULL, NULL, &w, &h);
 	renderTexture(tex, ren, x, y, w, h, clip, tile);
+}
+
+void SdlHelper::renderText(SDL_Renderer *ren, const std::string &message,
+	SDL_Color color, int fontSize)
+{
+
+	if (font == nullptr) {
+
+		return;
+	}
+
+	SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
+	if (surf == nullptr) {
+		TTF_CloseFont(font);
+
+		return;
+	}
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(ren, surf);
+	if (texture == nullptr) {
+		return;
+	}
+
+	int texW = 0;
+	int texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+
+	renderTexture(texture, ren, 0, 0, texW, texH);
+
+	SDL_FreeSurface(surf);	
 }

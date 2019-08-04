@@ -1,6 +1,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include "../TetrisRendering/tetris_rendering.h"
 #include "../GameLogic/game.h"
 //#include "../TetrisRendering/logging.h"
@@ -20,9 +21,14 @@ int main(int argc, char * argv[])
 		//log.logSDLError("IMG_Init");
 		SDL_Quit();
 	}
+	if (TTF_Init() != 0) {
+		//logSDLError(std::cout, "TTF_Init");
+		SDL_Quit();
+	}
 
 	TetrisRendering *ren = new TetrisRendering();
+
 	Game *game = new Game(ren);
-	game->start();
+	game->Start();
 	return 0;
 }

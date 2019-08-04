@@ -1,8 +1,9 @@
 #include "tetris_rendering.h"
 
 #include "SDL_image.h"
+#include "SDL_ttf.h"
 #include "logging.h"
-#include "res_path.h"
+
 #include "../GameLogic/game.h"
 
 TetrisRendering::TetrisRendering()
@@ -62,6 +63,16 @@ void TetrisRendering::RenderFrame(std::vector<std::vector<bool>> grid) {
 		}
 	}
 
-	SDL_RenderPresent(ren);
+	SDL_Color sdlColor = { _textColor.R, _textColor.G, _textColor.B, _textColor.A };
+	sdlHelper_->renderText(ren, _displayText, sdlColor, _fontSize);
 
+	SDL_RenderPresent(ren);
+}
+
+void TetrisRendering::RenderText(const std::string &message, Color color, int fontSize) {
+
+	_displayText = message;
+	_textColor = color;
+	_fontSize = fontSize;	
+	
 }

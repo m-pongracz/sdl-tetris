@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-std::string getResourcePath(const std::string &subDir = "") {
+inline std::string getResourcePath(const std::string &subDir = "") {
 #if defined _WIN64
 	std::string BIN_FOLDER = "x64";
 	const char SEP = '\\';

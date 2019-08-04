@@ -6,248 +6,284 @@
 #include <string>
 #include "input.h"
 
-Game::Game(TetrisRendering* renderer) : gameLogic_(gridHeight, gridWidth)
+Game::Game(TetrisRendering* renderer) : _gameLogic(gridHeight, gridWidth)
 {
-	renderer_ = renderer;
+	_renderer = renderer;
 
 	grid.resize(gridHeight, std::vector<bool>(gridWidth, false));
 
-	score_ = 0;
-	getNextCube_();
-	quit_ = false;
+	_score = 0;
+	getNextCube();
+	_quit = false;
 }
 
 Game::~Game()
 {
 }
 
-GameObject Game::getRandomCube_()
+GameObject Game::getRandomCube()
 {
-	int r = getRandomNumber_(0, 6);
-	r = 6;
+	int r = getRandomNumber(0, 6);
+	GameLogic gameLogic = *new GameLogic(Game::gridHeight, Game::gridWidth);
 	GameObject cube(static_cast<CubeType>(r));
+
+	cube.setX(3);
+
 	return cube;
 }
 
-void Game::getNextCube_()
+void Game::getNextCube()
 {
-	currentCube_ = getRandomCube_();
+	_score += 10;
+
+	_currentCube = getRandomCube();
+
+	if (cubeOnNewPosition(_currentCube)) {
+		_running = false;
+	}
 }
 
-void Game::mainLoop_()
+void Game::mainLoop()
 {
 	int lastElapsedTime = 0;
 
 	using clock = std::chrono::high_resolution_clock;
 	auto startTime = clock::now();
 	std::chrono::milliseconds elapsedTime;
-	while (!quit_) {
-		while (running_) {
+	while (!_quit) {
+		while (_running) {
 			typedef void(Game::*mdPtr)();
-			mdPtr md = &Game::MoveCubeDown;
+			mdPtr md = &Game::moveCubeDown;
 
 			typedef void(Game::*mlPtr)();
-			mdPtr ml = &Game::MoveCubeLeft;
+			mdPtr ml = &Game::moveCubeLeft;
 
 			typedef void(Game::*mrPtr)();
-			mdPtr mr = &Game::MoveCubeRight;
+			mdPtr mr = &Game::moveCubeRight;
 
 			typedef void(Game::*rotatePtr)();
-			rotatePtr rotate = &Game::RotateCube;
+			rotatePtr rotate = &Game::rotateCube;
 
-			Input::pollForCubeMovement(this, md, ml, mr, rotate);
+			typedef void(Game::*rushDownPtr)();
+			rushDownPtr rush = &Game::rushCubeDown;
+
+
+			Input::pollForCubeMovement(this, md, ml, mr, rotate, rush);
 
 			auto deltaTime = clock::now() - startTime;
 			elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
 
-			if (elapsedTime.count() >= lastElapsedTime + 1000) {
+			if (elapsedTime.count() >= lastElapsedTime + 1000 - elapsedTime.count() / 10000) {
 				lastElapsedTime = elapsedTime.count();
 
-				//MoveCubeDown();
+				moveCubeDown();
 			}
 
-			std::cout << elapsedTime.count() << std::endl;
+			std::cout << _score << std::endl;
 
-			const int currCubeXOffset = currentCube_.X();
-			const int currCubeYOffset = currentCube_.Y();
+			const int currCubeXOffset = _currentCube.X();
+			const int currCubeYOffset = _currentCube.Y();
 
-			for (int y = 0; y < currentCube_.Footprint().size(); y++) {
-				for (int x = 0; x < currentCube_.Footprint()[0].size(); x++) {
+			for (int y = 0; y < _currentCube.Footprint().size(); y++) {
+				for (int x = 0; x < _currentCube.Footprint()[0].size(); x++) {
 
 					bool nextGridVal = false;
 					//if footprint is true -> imprint true on grid according to footprint + its x,y offset
-					if (currentCube_.Footprint()[y][x] == true) {
+					if (_currentCube.Footprint()[y][x] == true) {
 						nextGridVal = true;
 						grid[y + currCubeYOffset][x + currCubeXOffset] = nextGridVal;
 					}
 				}
 			}
 
-			if (renderer_ != nullptr) {
-				renderer_->RenderFrame(grid);
+			if (_renderer != nullptr) {
+
+				Color color(255, 0, 0, 255);
+
+				_renderer->RenderText(std::to_string(_score), color, 64);
+
+				_renderer->RenderFrame(grid);
 			}
 		}
 	}
 }
 
 
-void Game::startMainLoop_()
+void Game::startMainLoop()
 {
-	running_ = true;
-	mainLoop_();
+	_running = true;
+	mainLoop();
 }
 
-void Game::draw_()
-{
-
-}
-
-void Game::start()
-{
-	startMainLoop_();
-}
-void Game::stop()
-{
-
-}
-void Game::resume()
-{
-
-}
-void Game::pause()
+void Game::draw()
 {
 
 }
 
-int Game::getRandomNumber_(int min, int max) {
+void Game::Start()
+{
+	startMainLoop();
+}
+void Game::Stop()
+{
+
+}
+void Game::Resume()
+{
+
+}
+void Game::Pause()
+{
+
+}
+
+int Game::getRandomNumber(int min, int max) {
 	static std::mt19937 mt(std::chrono::steady_clock::now().time_since_epoch().count());
 	std::uniform_int_distribution<int> dist(min, max);
 	return dist(mt);
 }
 
-int Game::test() {
+int Game::Test() {
 	return 1;
 }
 
-void Game::MoveCubeDown() {
+void Game::moveCubeDown() {
 
-	bool wasInDirection = false;
-	bool notOutsideGrid = false;
+	bool cubeInDirection = false;
+	bool borderInDirection;
 
-	if (gameLogic_.canCubeGoDown_(currentCube_)) {
-		notOutsideGrid = true;
-		const int currCubeXOffset = currentCube_.X();
-		const int currCubeYOffset = currentCube_.Y() + 1;
+	if (_gameLogic.canCubeGoDown_(_currentCube)) {
+		borderInDirection = false;
 
-		auto cleanedPositions = PrevCubePosCleanup();
-		if (cubeInDirection(direction::down)) {
-			wasInDirection = true;
+		auto cleanedPositions = prevCubePosCleanup();
 
+		GameObject* p = &_currentCube;
+		GameObject cube = *p;
+		cube.MoveD();
+
+		if (cubeOnNewPosition(cube)) {
+			cubeInDirection = true;
 
 			imprintPositionsOnGrid(cleanedPositions);
-
 		}
-
-		currentCube_.MoveD();
+		else {
+			cubeInDirection = false;
+			_currentCube.MoveD();
+		}
+	}
+	else {
+		borderInDirection = true;
 	}
 
-	if (wasInDirection || !notOutsideGrid) {
-		for (int y = gridHeight - 1; y >= 0; --y) {
-			bool isRowComplete = true;
-			for (int x = gridWidth - 1; x >= 0; --x) {
-				if (grid[y][x] == false) isRowComplete = false;
-			}
-			if (isRowComplete == true) {
-				for (int x = gridWidth - 1; x >= 0; --x) {
-					grid[y][x] = false;
-				}
-				//shift all rows down
-				for (int y1 = y; y1 >= 1; --y1) {
-					bool isRowComplete = true;
-					for (int x1 = gridWidth - 1; x1 >= 0; --x1) {
-						grid[y1][x1] = grid[y1 - 1][x1];
-					}
-				}
-				//move y pos pointer one pos down again because of the row shift
-				y++;
-				if (currentCube_.X() != 0) currentCube_.setX(currentCube_.X() - 1);
-			}
-		}
-		getNextCube_();
+	if (cubeInDirection || borderInDirection) {
+		deleteCompleteRows();
+		getNextCube();
 	}
 }
 
-void Game::MoveCubeLeft() {
-	if (gameLogic_.canCubeGoLeft_(currentCube_)) {
-		const int currCubeXOffset = currentCube_.X() - 1;
-		const int currCubeYOffset = currentCube_.Y();
+void Game::moveCubeLeft() {
+	if (_gameLogic.canCubeGoLeft_(_currentCube)) {
+		const int currCubeXOffset = _currentCube.X() - 1;
+		const int currCubeYOffset = _currentCube.Y();
 
-		auto cleanedPositions = PrevCubePosCleanup();
+		auto cleanedPositions = prevCubePosCleanup();
 
-		if (cubeInDirection(direction::left)) {
+		GameObject* p = &_currentCube;
+		GameObject cube = *p;
+
+		cube.MoveL();
+
+		if (cubeOnNewPosition(cube)) {
 			imprintPositionsOnGrid(cleanedPositions);
 			return;
 		}
 
-		currentCube_.MoveL();
+		_currentCube.MoveL();
 	}
 }
 
-void Game::MoveCubeRight() {
-	if (gameLogic_.canCubeGoRight_(currentCube_)) {
-		const int currCubeXOffset = currentCube_.X() + 1;
-		const int currCubeYOffset = currentCube_.Y();
+void Game::moveCubeRight() {
+	if (_gameLogic.canCubeGoRight_(_currentCube)) {
+		const int currCubeXOffset = _currentCube.X() + 1;
+		const int currCubeYOffset = _currentCube.Y();
 
-		auto cleanedPositions = PrevCubePosCleanup();
+		auto cleanedPositions = prevCubePosCleanup();
 
-		if (cubeInDirection(direction::right)) {
+		GameObject* p = &_currentCube;
+		GameObject cube = *p;
+
+		cube.MoveR();
+
+		if (cubeOnNewPosition(cube)) {
 			imprintPositionsOnGrid(cleanedPositions);
 			return;
 		}
 
-		currentCube_.MoveR();
+		_currentCube.MoveR();
 	}
 }
 
-void Game::RotateCube() {
-	auto cleanedPositions = PrevCubePosCleanup();
-	//TODO: bude podle toho jaká je pøedchozí rotace -> když bude 3 tak se to bude brát z leva/hora
-	int bYbottom = currentCube_.getFootprintBoundaryY(tbDirection::dBottom);
-	int bXright = currentCube_.getFootprintBoundaryX(lrDirection::dRight);
-	int bYtop = currentCube_.getFootprintBoundaryY(tbDirection::dTop);
-	int bXleft = currentCube_.getFootprintBoundaryX(lrDirection::dLeft);
+void Game::rotateCube() {
+	auto cleanedPositions = prevCubePosCleanup();
 
-	if (currentCube_.X() + bYbottom > gridWidth - 1 || currentCube_.X() - bYtop < 0) {
-
-		int newX = (gridWidth - 1) - bYbottom;
-		//currentCube_.setX(newX);
-
+	if (!_gameLogic.canCubeBeRotatedCW(_currentCube)) {
 		return;
 	}
-	if (currentCube_.Y() + bXright > gridHeight - 1 || currentCube_.Y() - bXleft < 0) {
-		return;
-	}
-	//if (currentCube_.Y() + bYtop > gridWidth - 1 || currentCube_.Y() + bYtop < 0) {
-	//	return;
-	//}
-	//if (currentCube_.Y() + bXleft > gridHeight - 1 || currentCube_.Y() + bXleft < 0) {
-	//	return;
-	//}
 
-	if (cubeInDirection(direction::current)) {
+	GameObject* p = &_currentCube;
+	GameObject cube = *p;
+
+	cube.RotateCCW();
+
+	if (cubeOnNewPosition(cube)) {
 		imprintPositionsOnGrid(cleanedPositions);
 		return;
 	}
 
-	currentCube_.RotateCW();
+	_currentCube.RotateCCW();
 }
 
-std::vector<std::vector<int>> Game::PrevCubePosCleanup() {
+void Game::rushCubeDown() {
+
+	bool floorHit = false;
+
+	while (!floorHit) {
+		if (_gameLogic.canCubeGoDown_(_currentCube)) {
+
+
+			auto cleanedPositions = prevCubePosCleanup();
+
+			GameObject* p = &_currentCube;
+			GameObject cube = *p;
+			cube.MoveD();
+
+			if (cubeOnNewPosition(cube)) {
+				floorHit = true;
+
+				imprintPositionsOnGrid(cleanedPositions);
+			}
+			else {
+				_currentCube.MoveD();
+			}
+		}
+		else {
+			floorHit = true;
+		}
+	}
+	//cheating my way through the current cube positions not being imprinted on the grid since 
+	//this is raised by kboard event and normal imprinting is in the main loop
+	auto positions = prevCubePosCleanup();
+	imprintPositionsOnGrid(positions);
+
+	moveCubeDown();
+}
+
+std::vector<std::vector<int>> Game::prevCubePosCleanup() {
 
 	int trueCount = 0;
-	for (int y = 0; y < currentCube_.Footprint().size(); y++) {
-		for (int x = 0; x < currentCube_.Footprint()[0].size(); x++) {
-			if (currentCube_.Footprint()[y][x] == true) {
+	for (int y = 0; y < _currentCube.Footprint().size(); y++) {
+		for (int x = 0; x < _currentCube.Footprint()[0].size(); x++) {
+			if (_currentCube.Footprint()[y][x] == true) {
 				++trueCount;
 			}
 		}
@@ -256,13 +292,13 @@ std::vector<std::vector<int>> Game::PrevCubePosCleanup() {
 	std::vector<std::vector<int>> cleanedPositions = *new std::vector<std::vector<int>>();
 	cleanedPositions.resize(trueCount, std::vector<int>(2));
 
-	const int currCubeXOffset = currentCube_.X();
-	const int currCubeYOffset = currentCube_.Y();
+	const int currCubeXOffset = _currentCube.X();
+	const int currCubeYOffset = _currentCube.Y();
 
 	int cI = 0;
-	for (int y = 0; y < currentCube_.Footprint().size(); y++) {
-		for (int x = 0; x < currentCube_.Footprint()[0].size(); x++) {
-			if (currentCube_.Footprint()[y][x] == true) {
+	for (int y = 0; y < _currentCube.Footprint().size(); y++) {
+		for (int x = 0; x < _currentCube.Footprint()[0].size(); x++) {
+			if (_currentCube.Footprint()[y][x] == true) {
 				grid[y + currCubeYOffset][x + currCubeXOffset] = false;
 				cleanedPositions[cI][0] = y + currCubeYOffset;
 				cleanedPositions[cI][1] = x + currCubeXOffset;
@@ -273,27 +309,14 @@ std::vector<std::vector<int>> Game::PrevCubePosCleanup() {
 	return cleanedPositions;
 }
 
-bool Game::cubeInDirection(direction dir) {
+bool Game::cubeOnNewPosition(GameObject cube) {
 
-	int currCubeXOffset = currentCube_.X();
-	int currCubeYOffset = currentCube_.Y();
+	int currCubeXOffset = cube.X();
+	int currCubeYOffset = cube.Y();
 
-	switch (dir) {
-	case direction::left:
-		--currCubeXOffset;
-		break;
-	case direction::right:
-		++currCubeXOffset;
-		break;
-	case direction::down:
-		++currCubeYOffset;
-		break;
-	case direction::current:
-		break;
-	}
-	for (int y = 0; y < currentCube_.Footprint().size(); y++) {
-		for (int x = 0; x < currentCube_.Footprint()[0].size(); x++) {
-			if (currentCube_.Footprint()[y][x] == true && grid[y + currCubeYOffset][x + currCubeXOffset] == true) {
+	for (int y = 0; y < cube.Footprint().size(); y++) {
+		for (int x = 0; x < cube.Footprint()[0].size(); x++) {
+			if (cube.Footprint()[y][x] == true && grid[y + currCubeYOffset][x + currCubeXOffset] == true) {
 				return true;
 			}
 		}
@@ -304,5 +327,32 @@ bool Game::cubeInDirection(direction dir) {
 void Game::imprintPositionsOnGrid(std::vector<std::vector<int>> positions) {
 	for (int z = 0; z < positions.size(); z++) {
 		grid[positions[z][0]][positions[z][1]] = true;
+	}
+}
+
+void Game::deleteCompleteRows() {
+	for (int y = gridHeight - 1; y >= 0; --y) {
+		bool isRowComplete = true;
+		for (int x = gridWidth - 1; x >= 0; --x) {
+			if (grid[y][x] == false) isRowComplete = false;
+		}
+		if (isRowComplete == true) {
+
+			_score += 100;
+
+			for (int x = gridWidth - 1; x >= 0; --x) {
+				grid[y][x] = false;
+			}
+			//shift all rows down
+			for (int y1 = y; y1 >= 1; --y1) {
+				bool isRowComplete = true;
+				for (int x1 = gridWidth - 1; x1 >= 0; --x1) {
+					grid[y1][x1] = grid[y1 - 1][x1];
+				}
+			}
+			//move y pos pointer one pos down again because of the row shift
+			y++;
+			if (_currentCube.X() != 0) _currentCube.setX(_currentCube.X() - 1);
+		}
 	}
 }

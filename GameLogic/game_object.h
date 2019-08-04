@@ -45,7 +45,7 @@ private:
 	int y_;
 	int rotation_;
 	void makeFootprint();
-	void rotateFootprint();
+	void rotateFootprintCCW();
 };
 
 #endif

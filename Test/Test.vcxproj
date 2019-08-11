@@ -51,6 +51,9 @@
     <ProjectReference Include="..\GameLogic\GameLogic.vcxproj">
       <Project>{7fb3183d-e8af-430a-a0a3-9b03984298b6}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\UserInterface\UserInterface.vcxproj">
+      <Project>{7b710baa-009d-4240-8ab5-0d5e490ab75d}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -86,7 +89,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>D:\Dev\c++\sdl\tetris\Tetris\TetrisRendering;D:\Dev\c++\sdl\SDL2\include;D:\Dev\c++\sdl\tetris\Tetris\GameLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Dev\c++\sdl\tetris\Tetris\UserInterface;D:\Dev\c++\sdl\tetris\Tetris\TetrisRendering;D:\Dev\c++\sdl\SDL2\include;D:\Dev\c++\sdl\tetris\Tetris\GameLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,7 +125,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>D:\Dev\c++\sdl\tetris\Tetris\TetrisRendering;D:\Dev\c++\sdl\SDL2\include;D:\Dev\c++\sdl\tetris\Tetris\GameLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Dev\c++\sdl\tetris\Tetris\UserInterface;D:\Dev\c++\sdl\tetris\Tetris\TetrisRendering;D:\Dev\c++\sdl\SDL2\include;D:\Dev\c++\sdl\tetris\Tetris\GameLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

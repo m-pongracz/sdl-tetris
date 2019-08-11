@@ -26,7 +26,30 @@ int main(int argc, char * argv[])
 		SDL_Quit();
 	}
 
-	TetrisRendering *ren = new TetrisRendering();
+	Grid uiGrid = Grid(480, 660);
+
+	Row textRow = Row(0, 100);
+	Row gameRow = Row(0, 560);
+
+	Column scoreColumn = Column();
+	Column gameColumn = Column(160, 0);
+	gameColumn.align = Align::center;
+	Column gameColumn2 = Column(180, 0);
+	gameColumn2.align = Align::center;
+
+
+	uiGrid.AddRow(&textRow);
+	uiGrid.AddRow(&gameRow);
+
+	textRow.AddColumn(&scoreColumn);
+
+	gameRow.AddColumn(&gameColumn);
+	gameRow.AddColumn(&gameColumn2);
+
+
+	uiGrid.RecalculateGrid();
+
+	TetrisRendering *ren = new TetrisRendering(&uiGrid);
 
 	Game *game = new Game(ren);
 	game->Start();

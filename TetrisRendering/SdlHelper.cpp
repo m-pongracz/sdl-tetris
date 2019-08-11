@@ -4,7 +4,6 @@
 #include <string>
 #include <SDL_image.h>
 
-
 Logging *logger;
 
 
@@ -18,19 +17,6 @@ SdlHelper::SdlHelper(Logging *_logger)
 }
 
 SDL_Texture* SdlHelper::loadTexture(const std::string &file, SDL_Renderer *ren) {
-	/*SDL_Texture *texture = nullptr;
-	SDL_Surface *loadedImage = SDL_LoadBMP(file.c_str());
-	if (loadedImage != nullptr) {
-		texture = SDL_CreateTextureFromSurface(ren, loadedImage);
-		SDL_FreeSurface(loadedImage);
-		if (texture == nullptr) {
-			(*logger).logSDLError("CreateTextureFromSurface");
-		}
-	}
-	else {
-		(*logger).logSDLError("LoadBMP");
-	}
-	return texture;*/
 
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
 	if (texture == nullptr) {
@@ -39,17 +25,13 @@ SDL_Texture* SdlHelper::loadTexture(const std::string &file, SDL_Renderer *ren) 
 	return texture;
 }
 
-void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h, SDL_Rect *clip, bool tile) {
+void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Point* coords, Dimensions* dimensions, SDL_Rect *clip, bool tile) {
 	SDL_Rect dst;
-	dst.x = x;
-	dst.y = y;
-	dst.w = w;
-	dst.h = h;
+	dst.x = coords->x();
+	dst.y = coords->y();
+	dst.w = dimensions->w();
+	dst.h = dimensions->h();
 
-	//if (clip != nullptr) {
-	//	dst.w = clip->w;
-	//	dst.h = clip->h;
-	//}
 
 	if (tile) {
 		int iW, iH;
@@ -61,8 +43,8 @@ void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 		int dstXOffset = dst.x;
 		int dstYOffset = dst.y;
 
-		for (int x = 0; x < h; ++x) {
-			for (int y = 0; y < w; ++y) {
+		for (int x = 0; x < dst.h; ++x) {
+			for (int y = 0; y < dst.w; ++y) {
 				dst.x = (x * iW) + dstXOffset;
 				dst.y = (y * iH) + dstYOffset;
 				SDL_RenderCopy(ren, tex, clip, &dst);
@@ -74,13 +56,16 @@ void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 	}
 }
 
-void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, SDL_Rect *clip, bool tile) {
-	int w, h;
+void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Point* coords, SDL_Rect *clip, bool tile) {
+	Dimensions d = Dimensions(0, 0);
+	int w = d.w();
+	int h = d.h();
+
 	SDL_QueryTexture(tex, NULL, NULL, &w, &h);
-	renderTexture(tex, ren, x, y, w, h, clip, tile);
+	renderTexture(tex, ren, coords, &d, clip, tile);
 }
 
-void SdlHelper::renderText(SDL_Renderer *ren, const std::string &message,
+void SdlHelper::renderText(SDL_Renderer *ren, Point* coords, Dimensions* dimensions, const std::string &message,
 	SDL_Color color, int fontSize)
 {
 
@@ -100,11 +85,12 @@ void SdlHelper::renderText(SDL_Renderer *ren, const std::string &message,
 		return;
 	}
 
-	int texW = 0;
-	int texH = 0;
-	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+	//Querying texture for its true size and overriding dimensions so they match the texture
+	int w, h;
+	//w and h serve as variables for out in c#
+	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
-	renderTexture(texture, ren, 0, 0, texW, texH);
+	renderTexture(texture, ren, coords, new Dimensions(w, h));
 
 	SDL_FreeSurface(surf);	
 }

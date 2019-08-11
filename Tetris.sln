@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameLogic", "GameLogic\Game
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TetrisRendering", "TetrisRendering\TetrisRendering.vcxproj", "{04767720-9F6F-480D-8B71-EFB2F9F28AE1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UserInterface", "UserInterface\UserInterface.vcxproj", "{7B710BAA-009D-4240-8AB5-0D5E490AB75D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Release|x64.Build.0 = Release|x64
 		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Release|x86.ActiveCfg = Release|Win32
 		{04767720-9F6F-480D-8B71-EFB2F9F28AE1}.Release|x86.Build.0 = Release|Win32
+		{7B710BAA-009D-4240-8AB5-0D5E490AB75D}.Debug|x64.ActiveCfg = Debug|x64
+		{7B710BAA-009D-4240-8AB5-0D5E490AB75D}.Debug|x64.Build.0 = Debug|x64
+		{7B710BAA-009D-4240-8AB5-0D5E490AB75D}.Debug|x86.ActiveCfg = Debug|Win32
+		{7B710BAA-009D-4240-8AB5-0D5E490AB75D}.Debug|x86.Build.0 = Debug|Win32
+		{7B710BAA-009D-4240-8AB5-0D5E490AB75D}.Release|x64.ActiveCfg = Release|x64
+		{7B710BAA-009D-4240-8AB5-0D5E490AB75D}.Release|x64.Build.0 = Release|x64
+		{7B710BAA-009D-4240-8AB5-0D5E490AB75D}.Release|x86.ActiveCfg = Release|Win32
+		{7B710BAA-009D-4240-8AB5-0D5E490AB75D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

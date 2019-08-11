@@ -5,23 +5,27 @@
 #include <vector>
 #include "res_path.h"
 #include "color.h"
+#include "grid.h"
+#include "dimensions.h"
+#include "column.h"
 
 class TetrisRendering
 {
 public:
-	TetrisRendering();
+	TetrisRendering(Grid* grid);
 	SDL_Window *win;
 	SDL_Renderer *ren;
 	SDL_Texture *bg;
 	SDL_Texture *cube;
 	SDL_Texture *gridBox;
 	SdlHelper *sdlHelper_;
-	void RenderFrame(std::vector<std::vector<bool>> grid);
-	void RenderText(const std::string &message, Color color, int fontSize);
-private:
-	std::string _displayText;
-	Color _textColor;
-	int _fontSize;
+	void RenderFrame(const Column* column, std::vector<std::vector<bool>> grid);
+	void RenderText(const Column* column, const std::string &message, Color color, int fontSize);
+	void Clear();
+	void Render();
+	auto grid() & -> Grid* { return _grid; };
+private:	
+	Grid* _grid;
 };
 
 #endif

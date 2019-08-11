@@ -52,6 +52,8 @@ void Game::mainLoop()
 	std::chrono::milliseconds elapsedTime;
 	while (!_quit) {
 		while (_running) {
+			_renderer->Clear();
+
 			typedef void(Game::*mdPtr)();
 			mdPtr md = &Game::moveCubeDown;
 
@@ -98,11 +100,14 @@ void Game::mainLoop()
 
 			if (_renderer != nullptr) {
 
-				Color color(255, 0, 0, 255);
+				Color scoreColor(255, 0, 0, 255);
 
-				_renderer->RenderText(std::to_string(_score), color, 64);
+				_renderer->RenderText(_renderer->grid()->GetColumnAt(0, 0), std::to_string(_score), scoreColor, 64);
 
-				_renderer->RenderFrame(grid);
+				_renderer->RenderFrame(_renderer->grid()->GetColumnAt(1, 0), grid);
+				_renderer->RenderFrame(_renderer->grid()->GetColumnAt(1, 1), grid);
+
+				_renderer->Render();
 			}
 		}
 	}

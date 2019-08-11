@@ -6,8 +6,21 @@
 
 #include "../GameLogic/game.h"
 
-TetrisRendering::TetrisRendering()
+TetrisRendering::TetrisRendering(Grid* grid)
 {
+	_grid = grid;
+
+
+
+	//auto scoreCol = _grid->GetColumnAt(0, 0);
+	//_scorePos = _grid->GetColumnPosition(0, 0);
+	//_scoreDimensions = Dimensions(scoreCol->width(), scoreCol->height());
+
+	//_scorePos = _grid->GetColumnPosition(0, 0);
+	//_scoreDimensions = Dimensions(scoreColumn.width(), scoreColumn.height());
+
+	//_gamePos = _grid->GetColumnPosition(1, 0);
+	//_gameDimensions = Dimensions(gameColumn.width(), gameColumn.height());
 
 	Logging log(&std::cout);
 	sdlHelper_ = new SdlHelper(&log);
@@ -21,7 +34,7 @@ TetrisRendering::TetrisRendering()
 	//	SDL_Quit();
 	//}
 
-	win = SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
+	win = SDL_CreateWindow("Tetris", 100, 100, _grid->width(), _grid->height(), SDL_WINDOW_SHOWN);
 	if (win == nullptr) {
 		log.logSDLError("SDL_CreateWindow Error: ");
 		SDL_Quit();
@@ -50,29 +63,45 @@ TetrisRendering::TetrisRendering()
 	}
 }
 
-void TetrisRendering::RenderFrame(std::vector<std::vector<bool>> grid) {
+void TetrisRendering::RenderFrame(const Column* column, std::vector<std::vector<bool>> grid) {
 
-	SDL_RenderClear(ren);
+	auto gamePos = _grid->GetColumnPosition(column->rowPosition(), column->position());
+	auto gameDimensions = Dimensions(column->dimensions().w(), column->dimensions().h());
+
+	int cubeW = gameDimensions.w() / Game::gridWidth;
+	int cubeH = gameDimensions.h() / Game::gridHeight;
 
 	for (int x = 0; x < Game::gridWidth; ++x) {
 		for (int y = 0; y < Game::gridHeight; ++y) {
-			sdlHelper_->renderTexture(gridBox, ren, x * 20, y * 20, 20, 20);
+
+			Point cubeCoords = Point(gamePos.x() + x * cubeW, gamePos.y() + y * cubeH);
+			Dimensions cubeDimensions = Dimensions(cubeW, cubeH);
+
+			sdlHelper_->renderTexture(gridBox, ren, &cubeCoords, &cubeDimensions);
 			if (grid[y][x] == true) {
-				sdlHelper_->renderTexture(cube, ren, x * 20, y * 20, 20, 20);
+				sdlHelper_->renderTexture(cube, ren, &cubeCoords, &cubeDimensions);
 			}
 		}
 	}
 
-	SDL_Color sdlColor = { _textColor.R, _textColor.G, _textColor.B, _textColor.A };
-	sdlHelper_->renderText(ren, _displayText, sdlColor, _fontSize);
+}
 
+void TetrisRendering::RenderText(const Column* column, const std::string &message, Color color, int fontSize) 
+{
+	auto gamePos = _grid->GetColumnPosition(column->rowPosition(), column->position());
+	auto gameDimensions = Dimensions(column->dimensions().w(), column->dimensions().h());
+
+	SDL_Color sdlColor = { color.R, color.G, color.B, color.A };
+
+	sdlHelper_->renderText(ren, &gamePos, &gameDimensions, message, sdlColor, fontSize);
+	
+}
+
+void TetrisRendering::Clear() {
+	SDL_RenderClear(ren);
+}
+
+void TetrisRendering::Render() {
 	SDL_RenderPresent(ren);
 }
 
-void TetrisRendering::RenderText(const std::string &message, Color color, int fontSize) {
-
-	_displayText = message;
-	_textColor = color;
-	_fontSize = fontSize;	
-	
-}

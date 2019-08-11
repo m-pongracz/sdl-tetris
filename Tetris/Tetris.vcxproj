@@ -87,7 +87,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Dev\c++\sdl\tetris\Tetris\TetrisRendering;D:\Dev\c++\sdl\SDL2\include;D:\Dev\c++\sdl\tetris\Tetris\GameLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Dev\c++\sdl\tetris\Tetris\UserInterface;D:\Dev\c++\sdl\tetris\Tetris\TetrisRendering;D:\Dev\c++\sdl\SDL2\include;D:\Dev\c++\sdl\tetris\Tetris\GameLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -118,7 +118,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Dev\c++\sdl\tetris\Tetris\TetrisRendering;D:\Dev\c++\sdl\SDL2\include;D:\Dev\c++\sdl\tetris\Tetris\GameLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Dev\c++\sdl\tetris\Tetris\UserInterface;D:\Dev\c++\sdl\tetris\Tetris\TetrisRendering;D:\Dev\c++\sdl\SDL2\include;D:\Dev\c++\sdl\tetris\Tetris\GameLogic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -137,6 +137,9 @@
     </ProjectReference>
     <ProjectReference Include="..\TetrisRendering\TetrisRendering.vcxproj">
       <Project>{04767720-9f6f-480d-8b71-efb2f9f28ae1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\UserInterface\UserInterface.vcxproj">
+      <Project>{7b710baa-009d-4240-8ab5-0d5e490ab75d}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

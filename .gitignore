@@ -37,3 +37,14 @@
 *.ipch
 *.ipch
 *.ipch
+
+#custom
+*.suo
+*.db
+*.pdb
+*.CopyComplete
+*.iobj
+*.ipdb
+*.ilk
+*.user
+*.filters

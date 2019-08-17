@@ -15,6 +15,15 @@ Game::Game(TetrisRendering* renderer) : _gameLogic(gridHeight, gridWidth)
 	_score = 0;
 	getNextCube();
 	_quit = false;
+
+	_moveDPtr = &Game::moveCubeDown;
+	_moveLPtr = &Game::moveCubeLeft;
+	_moveRPtr = &Game::moveCubeRight;
+	_rotatePtr = &Game::rotateCube;
+	_rushDownPtr = &Game::rushCubeDown;
+
+	_pausePtr = &Game::Pause;
+	_resumePtr = &Game::Resume;
 }
 
 Game::~Game()
@@ -50,27 +59,39 @@ void Game::mainLoop()
 	using clock = std::chrono::high_resolution_clock;
 	auto startTime = clock::now();
 	std::chrono::milliseconds elapsedTime;
-	while (!_quit) {
-		while (_running) {
+	while (!_quit)
+	{
+		Input::pollForStopped
+		(
+			this,
+			_resumePtr
+		);
+
+		if (_renderer != nullptr) {
 			_renderer->Clear();
+			Game::renderScore();
+			Game::renderGrid();
 
-			typedef void(Game::*mdPtr)();
-			mdPtr md = &Game::moveCubeDown;
+			Color overlayColor(0, 0, 0, 127);
+			_renderer->RenderColor(_renderer->grid()->GetColumnAt(1, 0), overlayColor);
+			Color pausedColor(255, 255, 255, 255);
+			_renderer->RenderText(_renderer->grid()->GetColumnAt(1, 0), "PAUSED", pausedColor, 64);
 
-			typedef void(Game::*mlPtr)();
-			mdPtr ml = &Game::moveCubeLeft;
+			_renderer->Render();
+		}
 
-			typedef void(Game::*mrPtr)();
-			mdPtr mr = &Game::moveCubeRight;
+		while (_running) {
 
-			typedef void(Game::*rotatePtr)();
-			rotatePtr rotate = &Game::rotateCube;
-
-			typedef void(Game::*rushDownPtr)();
-			rushDownPtr rush = &Game::rushCubeDown;
-
-
-			Input::pollForCubeMovement(this, md, ml, mr, rotate, rush);
+			Input::pollForRunning
+			(
+				this,
+				_moveDPtr,
+				_moveLPtr,
+				_moveRPtr,
+				_rotatePtr,
+				_rushDownPtr,
+				_pausePtr
+			);
 
 			auto deltaTime = clock::now() - startTime;
 			elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
@@ -99,20 +120,26 @@ void Game::mainLoop()
 			}
 
 			if (_renderer != nullptr) {
-
-				Color scoreColor(255, 0, 0, 255);
-
-				_renderer->RenderText(_renderer->grid()->GetColumnAt(0, 0), std::to_string(_score), scoreColor, 64);
-
-				_renderer->RenderFrame(_renderer->grid()->GetColumnAt(1, 0), grid);
-				_renderer->RenderFrame(_renderer->grid()->GetColumnAt(1, 1), grid);
-
+				_renderer->Clear();
+				Game::renderScore();
+				Game::renderGrid();
 				_renderer->Render();
 			}
 		}
 	}
 }
 
+void Game::renderScore() {
+	Color scoreColor(255, 0, 0, 255);
+	Color scoreBgColor(255, 255, 0, 255);
+
+	_renderer->RenderColor(_renderer->grid()->GetColumnAt(0, 0), scoreBgColor);
+	_renderer->RenderText(_renderer->grid()->GetColumnAt(0, 0), std::to_string(_score), scoreColor, 64);
+}
+
+void Game::renderGrid() {
+	_renderer->RenderFrame(_renderer->grid()->GetColumnAt(1, 0), grid);
+}
 
 void Game::startMainLoop()
 {
@@ -135,11 +162,11 @@ void Game::Stop()
 }
 void Game::Resume()
 {
-
+	_running = true;
 }
 void Game::Pause()
 {
-
+	_running = false;
 }
 
 int Game::getRandomNumber(int min, int max) {

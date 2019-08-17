@@ -47,6 +47,12 @@ TetrisRendering::TetrisRendering(Grid* grid)
 		SDL_Quit();
 	}
 
+	int bm = SDL_SetRenderDrawBlendMode(ren, SDL_BLENDMODE_BLEND);
+	if (bm != 0) {
+		log.logSDLError("SDL_SetRenderDrawBlendMode Error: ");
+		SDL_Quit();
+	}
+
 	std::string bgImagePath = getResourcePath("img") + "checkered.bmp";
 	std::string clipImagePath = getResourcePath("img") + "clip.png";
 	std::string cubeImagePath = getResourcePath("img") + "cube.bmp";
@@ -73,7 +79,6 @@ void TetrisRendering::RenderFrame(const Column* column, std::vector<std::vector<
 
 	for (int x = 0; x < Game::gridWidth; ++x) {
 		for (int y = 0; y < Game::gridHeight; ++y) {
-
 			Point cubeCoords = Point(gamePos.x() + x * cubeW, gamePos.y() + y * cubeH);
 			Dimensions cubeDimensions = Dimensions(cubeW, cubeH);
 
@@ -88,13 +93,19 @@ void TetrisRendering::RenderFrame(const Column* column, std::vector<std::vector<
 
 void TetrisRendering::RenderText(const Column* column, const std::string &message, Color color, int fontSize) 
 {
-	auto gamePos = _grid->GetColumnPosition(column->rowPosition(), column->position());
-	auto gameDimensions = Dimensions(column->dimensions().w(), column->dimensions().h());
+	auto textPos = _grid->GetColumnPosition(column->rowPosition(), column->position());
+	auto textDimensions = Dimensions(column->dimensions().w(), column->dimensions().h());	
 
-	SDL_Color sdlColor = { color.R, color.G, color.B, color.A };
-
-	sdlHelper_->renderText(ren, &gamePos, &gameDimensions, message, sdlColor, fontSize);
+	sdlHelper_->renderText(ren, &textPos, &textDimensions, message, color, fontSize);
 	
+}
+
+void TetrisRendering::RenderColor(const Column* column, Color color) 
+{
+	auto gamePos = _grid->GetColumnPosition(column->rowPosition(), column->position());
+	auto gameDimensions = Dimensions(column->dimensions().w(), column->dimensions().h());	
+
+	sdlHelper_->renderColor(ren, &gamePos, &gameDimensions, color);	
 }
 
 void TetrisRendering::Clear() {

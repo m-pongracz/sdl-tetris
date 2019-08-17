@@ -66,15 +66,15 @@ void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Point* coords
 }
 
 void SdlHelper::renderText(SDL_Renderer *ren, Point* coords, Dimensions* dimensions, const std::string &message,
-	SDL_Color color, int fontSize)
+	Color color, int fontSize)
 {
-
+	SDL_Color sdlColor = { color.R, color.G, color.B, color.A };
 	if (font == nullptr) {
 
 		return;
 	}
 
-	SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), color);
+	SDL_Surface *surf = TTF_RenderText_Blended(font, message.c_str(), sdlColor);
 	if (surf == nullptr) {
 		TTF_CloseFont(font);
 
@@ -90,7 +90,42 @@ void SdlHelper::renderText(SDL_Renderer *ren, Point* coords, Dimensions* dimensi
 	//w and h serve as variables for out in c#
 	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
+	Point* alignedCoords;
+	if (true) {
+		alignedCoords = new Point((dimensions->w() / 2) - (w / 4), (dimensions->h() / 2) - (h / 4));
+	}
+	else {
+		alignedCoords = coords;
+	}
+
+	renderTexture(texture, ren, alignedCoords, new Dimensions(w, h));
+
+	SDL_FreeSurface(surf);
+}
+
+void SdlHelper::renderColor(SDL_Renderer *ren, Point* coords, Dimensions* dimensions, Color color)
+{
+	SDL_Color sdlColor = { color.R, color.G, color.B, color.A };
+
+	SDL_Surface *surf = SDL_CreateRGBSurface(0, dimensions->w(), dimensions->h(), 32, 0, 0, 0, 0);
+	SDL_FillRect(surf, NULL, SDL_MapRGB(surf->format, sdlColor.r, sdlColor.g, sdlColor.b));
+
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(ren, surf);
+
+	if (color.A != 255) {
+		SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureAlphaMod(texture, sdlColor.a);
+	}
+	if (texture == nullptr) {
+		return;
+	}
+
+	//Querying texture for its true size and overriding dimensions so they match the texture
+	int w, h;
+	//w and h serve as variables for out in c#
+	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
 	renderTexture(texture, ren, coords, new Dimensions(w, h));
 
-	SDL_FreeSurface(surf);	
+	SDL_FreeSurface(surf);
 }

@@ -26,6 +26,18 @@ void GridElement::SetPosition(int position) {
 	_position = position;
 }
 
+void GridElement::SetMargin(int left, int right, int top, int bottom) {
+	marginLeft = left;
+	marginRight = right;
+	marginTop = top;
+	marginBottom = bottom;
+}
+
+void GridElement::SetMargin(int size) {
+	SetMargin(size, size, size, size);
+}
+
 GridElement::~GridElement()
 {
 }
+

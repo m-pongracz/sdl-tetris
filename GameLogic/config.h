@@ -5,6 +5,6 @@ static class Config
 {
 public:
 	static const int gridWidth = 8;
-	static const int gridHeight = 14;
+	static const int gridHeight = 16;
 };
 #endif

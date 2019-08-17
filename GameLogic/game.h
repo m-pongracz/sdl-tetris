@@ -27,6 +27,11 @@ public:
 	auto Running() & -> const bool& { return _running; };
 	auto Quit() const& -> const bool& { return _quit; };
 	auto Quit() & -> const bool& { return _quit; };
+	void moveCubeDown();
+	void moveCubeLeft();
+	void moveCubeRight();
+	void rotateCube();
+	void rushCubeDown();
 	int Test();
 private:
 	int _score;
@@ -43,15 +48,18 @@ private:
 	int getRandomNumber(int min, int max);
 	GameLogic _gameLogic;
 	TetrisRendering *_renderer;
-	void moveCubeDown();
-	void moveCubeLeft();
-	void moveCubeRight();
-	void rotateCube();
-	void rushCubeDown();
 	std::vector<std::vector<int>> prevCubePosCleanup();
 	bool cubeOnNewPosition(GameObject cube);
 	void imprintPositionsOnGrid(std::vector<std::vector<int>> positions);
 	void deleteCompleteRows();
-
+	void(Game::*_moveDPtr)();
+	void(Game::*_moveLPtr)();
+	void(Game::*_moveRPtr)();
+	void(Game::*_rotatePtr)();
+	void(Game::*_rushDownPtr)();
+	void(Game::*_pausePtr)();
+	void(Game::*_resumePtr)();
+	void renderGrid();
+	void renderScore();
 };
 #endif

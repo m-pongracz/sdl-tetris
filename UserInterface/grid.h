@@ -17,14 +17,14 @@ public:
 	auto rows() & -> const std::vector<Row*>& { return _rows; };
 	void AddRow(Row* row);
 	Point GetColumnPosition(int row, int column);
-	int GetRowPosition(int row);
+	Point GetRowPosition(int row);
 	const Column* GetColumnAt(int row, int column);
 	void RecalculateGrid();
 private:
 	int _width;
 	int _height;
 	std::vector<Row*> _rows;
-	int getAlignMargin(Column* column);
+	//int getAlignMargin(Column* column);
 };
 
 #endif

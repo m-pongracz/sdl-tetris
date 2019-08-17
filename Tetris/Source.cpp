@@ -29,14 +29,13 @@ int main(int argc, char * argv[])
 	Grid uiGrid = Grid(480, 660);
 
 	Row textRow = Row(0, 100);
-	Row gameRow = Row(0, 560);
+	Row gameRow = Row();
 
 	Column scoreColumn = Column();
-	Column gameColumn = Column(160, 0);
-	gameColumn.align = Align::center;
-	Column gameColumn2 = Column(180, 0);
-	gameColumn2.align = Align::center;
+	Column gameColumn = Column();
 
+	gameRow.SetMargin(10);
+	textRow.SetMargin(10);
 
 	uiGrid.AddRow(&textRow);
 	uiGrid.AddRow(&gameRow);
@@ -44,9 +43,7 @@ int main(int argc, char * argv[])
 	textRow.AddColumn(&scoreColumn);
 
 	gameRow.AddColumn(&gameColumn);
-	gameRow.AddColumn(&gameColumn2);
-
-
+	
 	uiGrid.RecalculateGrid();
 
 	TetrisRendering *ren = new TetrisRendering(&uiGrid);

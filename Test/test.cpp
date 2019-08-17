@@ -454,8 +454,3 @@ void cubeCWRotationTestHorizontal(GameObject cube, int fprintEmptyXLeft, int fpr
 //	line.RotateCCW();
 //}
 
-
-//GRIDLOGIC REGION END
-
-
-

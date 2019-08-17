@@ -9,6 +9,9 @@ class Row :
 	public GridElement
 {
 public:
+	Row() : GridElement() {
+
+	}
 	Row(int w, int h) : GridElement(w, h) {
 
 	}

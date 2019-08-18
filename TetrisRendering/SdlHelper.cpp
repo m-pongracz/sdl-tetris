@@ -27,8 +27,8 @@ SDL_Texture* SdlHelper::loadTexture(const std::string &file, SDL_Renderer *ren) 
 
 void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Point* coords, Dimensions* dimensions, SDL_Rect *clip, bool tile) {
 	SDL_Rect dst;
-	dst.x = coords->x();
-	dst.y = coords->y();
+	dst.x = coords->x;
+	dst.y = coords->y;
 	dst.w = dimensions->w();
 	dst.h = dimensions->h();
 
@@ -66,7 +66,7 @@ void SdlHelper::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Point* coords
 }
 
 void SdlHelper::renderText(SDL_Renderer *ren, Point* coords, Dimensions* dimensions, const std::string &message,
-	Color color, int fontSize)
+	Color color, int fontSize, AlignV vertical, AlignH horizontal)
 {
 	SDL_Color sdlColor = { color.R, color.G, color.B, color.A };
 	if (font == nullptr) {
@@ -90,12 +90,28 @@ void SdlHelper::renderText(SDL_Renderer *ren, Point* coords, Dimensions* dimensi
 	//w and h serve as variables for out in c#
 	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
 
-	Point* alignedCoords;
-	if (true) {
-		alignedCoords = new Point((dimensions->w() / 2) - (w / 4), (dimensions->h() / 2) - (h / 4));
+	Point* alignedCoords = new Point(coords->x, coords->y);
+
+	switch (vertical) {
+	case AlignV::aCenter: {
+		alignedCoords->y = coords->y + (dimensions->h() / 2) - (h / 2);
+		break;
 	}
-	else {
-		alignedCoords = coords;
+	case AlignV::aBottom: {
+		alignedCoords->y = coords->y + dimensions->h() - h;
+		break;
+	}
+	}
+
+	switch (horizontal) {
+	case AlignH::aMiddle: {
+		alignedCoords->x = coords->x + (dimensions->w() / 2) - (w / 2);
+		break;
+	}
+	case AlignH::aRight: {
+		alignedCoords->x = coords->x + dimensions->w() - w;
+		break;
+	}
 	}
 
 	renderTexture(texture, ren, alignedCoords, new Dimensions(w, h));

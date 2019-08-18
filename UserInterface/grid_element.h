@@ -3,7 +3,9 @@
 
 #include "dimensions.h"
 
-//enum Align { left, right, center };
+enum AlignH { aLeft, aRight, aMiddle };
+enum AlignV { aTop, aBottom, aCenter };
+
 
 class GridElement
 {

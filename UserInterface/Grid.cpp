@@ -71,7 +71,7 @@ void Grid::RecalculateGrid()
 
 Point Grid::GetColumnPosition(int row, int column) {
 	int x = 0;
-	int y = GetRowPosition(row).y();
+	int y = GetRowPosition(row).y;
 	int totalColumnWidth = 0;
 
 	Row* r = _rows[row];

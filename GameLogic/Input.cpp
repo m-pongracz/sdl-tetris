@@ -3,62 +3,102 @@
 #include "game.h"
 #include <SDL.h>;
 
-void Input::pollForRunning
-(
-	Game *game,
-	void(Game::*mdPtr)(),
-	void(Game::*mlPtr)(),
-	void(Game::*mrPtr)(),
-	void(Game::*rotatePtr)(),
-	void(Game::*rushDownPtr)(),
-	void(Game::*pausePtr)()
-)
+Input::Input(Game* game, const Uint8* keyStates) {
+	_game = game;
+	_keyStates = keyStates;
+}
+
+void Input::PollDown()
 {
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_KEYDOWN) {
-			switch (e.key.keysym.sym) {
-			case SDLK_LEFT:
-				(game->*mlPtr)();
-				break;
-			case SDLK_RIGHT:
-				(game->*mrPtr)();
-				break;
-			case SDLK_DOWN:
-				(game->*mdPtr)();
-				break;
-			case SDLK_UP:
-				(game->*rotatePtr)();
-				break;
-			case SDLK_SPACE:
-				(game->*rushDownPtr)();
-				break;
-			case SDLK_p:
-				(game->*pausePtr)();
-				break;
-			default:
-				break;
-			}
-		}
+	updateStates();
+
+	bool(Input::*keyPressTypePtr)(int);
+	keyPressTypePtr = &Input::key;
+
+	pollByPressType(keyPressTypePtr);
+	if ((this->*keyPressTypePtr)(SDL_SCANCODE_SPACE))
+	{
+		_game->rushCubeDown();
 	}
 }
 
-void Input::pollForStopped
-(
-	Game *game,
-	void(Game::*resumePtr)()
-)
+void Input::PollHold()
 {
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_KEYDOWN) {
-			switch (e.key.keysym.sym) {
-			case SDLK_p:
-				(game->*resumePtr)();
-				break;
-			default:
-				break;
-			}
-		}
+	//updateStates();
+
+	bool(Input::*keyPressTypePtr)(int);
+	keyPressTypePtr = &Input::key;
+
+	pollByPressType(keyPressTypePtr);
+}
+
+void Input::Poll() {
+	//updateStates();
+
+	//if (key(SDL_SCANCODE_LEFT))
+	//{
+	//	_game->ChangeVelocity(VelocityDirection::vLeft, 1);
+	//}
+	//if (key(SDL_SCANCODE_RIGHT))
+	//{
+	//	_game->ChangeVelocity(VelocityDirection::vRight, 1);
+	//}
+	//if (key(SDL_SCANCODE_UP)) _game->rotateCube();
+	//if (key(SDL_SCANCODE_DOWN)) _game->moveCubeDown();
+	//if (key(SDL_SCANCODE_SPACE)) _game->rushCubeDown();
+}
+
+void Input::updateStates() {
+	updateState(_previousState);
+	SDL_PumpEvents();
+	updateState(_currentState);
+}
+
+void Input::updateState(bool* stateArr) {
+	int keyArr[5] =
+	{
+		SDL_SCANCODE_LEFT,
+		SDL_SCANCODE_RIGHT,
+		SDL_SCANCODE_UP,
+		SDL_SCANCODE_DOWN,
+		SDL_SCANCODE_SPACE
+	};
+
+	for (int key : keyArr) {
+		stateArr[key] = !!_keyStates[key];
+	}
+}
+
+bool Input::keyPressed(int key) {
+	return !_previousState[key] && _currentState[key];
+	//return _currentState[key];
+}
+
+bool Input::keyHeld(int key) {
+	return _previousState[key] && _currentState[key];
+
+}
+
+bool Input::key(int key) {
+	return _currentState[key];
+
+}
+
+void Input::pollByPressType(bool(Input::*keyPressTypePtr)(int)) {
+	if ((this->*keyPressTypePtr)(SDL_SCANCODE_LEFT))
+	{
+		_game->ChangeVelocity(VelocityDirection::vLeft, 1);
+	}
+	if ((this->*keyPressTypePtr)(SDL_SCANCODE_RIGHT))
+	{
+		_game->ChangeVelocity(VelocityDirection::vRight, 1);
+	}
+	if ((this->*keyPressTypePtr)(SDL_SCANCODE_UP))
+	{
+		_game->ChangeVelocity(VelocityDirection::vRotation, 1);
+	}
+	if ((this->*keyPressTypePtr)(SDL_SCANCODE_DOWN))
+	{
+		_game->ChangeVelocity(VelocityDirection::vDown, 1);
 	}
 }

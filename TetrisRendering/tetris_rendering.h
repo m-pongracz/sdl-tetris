@@ -20,13 +20,21 @@ public:
 	SDL_Texture *gridBox;
 	SdlHelper *sdlHelper_;
 	void RenderFrame(const Column* column, std::vector<std::vector<bool>> grid);
-	void RenderText(const Column* column, const std::string &message, Color color, int fontSize);
+	void RenderText
+	(
+		const Column* column,
+		const std::string &message,
+		Color color,
+		int fontSize,
+		AlignV vertical = AlignV::aTop,
+		AlignH horizontal = AlignH::aLeft
+	);
 	void RenderColor(const Column* column, Color color);
 
 	void Clear();
 	void Render();
 	auto grid() & -> Grid* { return _grid; };
-private:	
+private:
 	Grid* _grid;
 };
 

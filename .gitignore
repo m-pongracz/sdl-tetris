@@ -48,3 +48,6 @@
 *.ilk
 *.user
 *.filters
+.vs/Tetris/v15/Browse.VC.opendb
+.vs/Tetris/v15/Solution.VC.db-shm
+.vs/Tetris/v15/Solution.VC.db-wal

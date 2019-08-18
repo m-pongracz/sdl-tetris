@@ -7,6 +7,7 @@
 #include "game_logic.h"
 #include "config.h"
 
+
 class Game
 {
 public:
@@ -32,6 +33,7 @@ public:
 	void moveCubeRight();
 	void rotateCube();
 	void rushCubeDown();
+	void ChangeVelocity(VelocityDirection direction, int value);
 	int Test();
 private:
 	int _score;
@@ -61,5 +63,6 @@ private:
 	void(Game::*_resumePtr)();
 	void renderGrid();
 	void renderScore();
+	void processVelocity();
 };
 #endif

@@ -17,7 +17,17 @@ public:
 	SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren);
 	void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Point* coords, SDL_Rect *clip = nullptr, bool tile = false);
 	void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Point* coords, Dimensions* dimensions, SDL_Rect *clip = nullptr, bool tile = false);
-	void renderText(SDL_Renderer *ren, Point* coords, Dimensions* dimensions, const std::string &message, Color color, int fontSize);
+	void renderText
+	(
+		SDL_Renderer *ren, 
+		Point* coords, 
+		Dimensions* dimensions, 
+		const std::string &message, 
+		Color color, 
+		int fontSize,
+		AlignV veritcal,
+		AlignH horizontal
+	);
 	void renderColor(SDL_Renderer *ren, Point* coords, Dimensions* dimensions, Color color);
 
 	TTF_Font *font;

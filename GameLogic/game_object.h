@@ -3,10 +3,12 @@
 
 #include <utility>;
 #include <vector>;
+#include "velocity.h"
 
 enum lrDirection { dLeft, dRight };
 enum tbDirection { dTop, dBottom };
 enum CubeType { Cube, Line, L, ReverseL, S, ReverseS, T };
+enum VelocityDirection { vLeft, vRight, vDown, vRotation };
 
 class GameObject
 {
@@ -38,6 +40,7 @@ public:
 	int getFootprintBoundaryY(tbDirection dir);
 	void setX(int x);
 	void setY(int y);
+	Velocity velocity;
 private:
 	std::vector<std::vector<bool>> footprint_;
 	CubeType type_;

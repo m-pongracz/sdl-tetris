@@ -6,17 +6,14 @@
 class Point
 {
 public:
-	Point(int x, int y);
+	Point(int x_, int y_);
 
-	auto x() const& -> const int& { return _x; };
-	auto x() & -> const int& { return _x; };
-	auto y() const& -> const int& { return _y; };
-	auto y() & -> const int& { return _y; };
+	int x;
+	int y;
 
 	~Point();
 private:
-	int _x;
-	int _y;
+
 };
 
 #endif

@@ -24,6 +24,7 @@ Game::Game(TetrisRendering* renderer) : _gameLogic(gridHeight, gridWidth)
 
 	_pausePtr = &Game::Pause;
 	_resumePtr = &Game::Resume;
+
 }
 
 Game::~Game()
@@ -54,18 +55,22 @@ void Game::getNextCube()
 
 void Game::mainLoop()
 {
+	const Uint8* keystates = SDL_GetKeyboardState(NULL);
+	Input input = Input(this, keystates);
+
 	int lastElapsedTime = 0;
+	int lastInputTime = 0;
 
 	using clock = std::chrono::high_resolution_clock;
 	auto startTime = clock::now();
 	std::chrono::milliseconds elapsedTime;
 	while (!_quit)
 	{
-		Input::pollForStopped
-		(
-			this,
-			_resumePtr
-		);
+		//Input::pollForStopped
+		//(
+		//	this,
+		//	_resumePtr
+		//);
 
 		if (_renderer != nullptr) {
 			_renderer->Clear();
@@ -75,23 +80,22 @@ void Game::mainLoop()
 			Color overlayColor(0, 0, 0, 127);
 			_renderer->RenderColor(_renderer->grid()->GetColumnAt(1, 0), overlayColor);
 			Color pausedColor(255, 255, 255, 255);
-			_renderer->RenderText(_renderer->grid()->GetColumnAt(1, 0), "PAUSED", pausedColor, 64);
+			_renderer->RenderText
+			(
+				_renderer->grid()->GetColumnAt(1, 0), 
+				"PAUSED",
+				pausedColor, 
+				64, 
+				AlignV::aCenter, 
+				AlignH::aMiddle
+			);
 
 			_renderer->Render();
 		}
 
 		while (_running) {
 
-			Input::pollForRunning
-			(
-				this,
-				_moveDPtr,
-				_moveLPtr,
-				_moveRPtr,
-				_rotatePtr,
-				_rushDownPtr,
-				_pausePtr
-			);
+			input.PollDown();
 
 			auto deltaTime = clock::now() - startTime;
 			elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
@@ -100,6 +104,14 @@ void Game::mainLoop()
 				lastElapsedTime = elapsedTime.count();
 
 				moveCubeDown();
+			}
+
+
+
+			if (elapsedTime.count() >= lastInputTime + 100) {
+				lastInputTime = elapsedTime.count();
+				input.PollHold();
+				processVelocity();
 			}
 
 			std::cout << _score << std::endl;
@@ -134,7 +146,15 @@ void Game::renderScore() {
 	Color scoreBgColor(255, 255, 0, 255);
 
 	_renderer->RenderColor(_renderer->grid()->GetColumnAt(0, 0), scoreBgColor);
-	_renderer->RenderText(_renderer->grid()->GetColumnAt(0, 0), std::to_string(_score), scoreColor, 64);
+	_renderer->RenderText
+	(
+		_renderer->grid()->GetColumnAt(0, 0),
+		std::to_string(_score),
+		scoreColor,
+		64,
+		AlignV::aCenter,
+		AlignH::aMiddle
+	);
 }
 
 void Game::renderGrid() {
@@ -387,4 +407,41 @@ void Game::deleteCompleteRows() {
 			if (_currentCube.X() != 0) _currentCube.setX(_currentCube.X() - 1);
 		}
 	}
+}
+
+void Game::ChangeVelocity(VelocityDirection direction, int value) {
+	switch (direction) {
+	case VelocityDirection::vLeft:
+		_currentCube.velocity.left = value;
+		break;
+	case VelocityDirection::vRight:
+		_currentCube.velocity.right = value;
+		break;
+	case VelocityDirection::vDown:
+		_currentCube.velocity.down = value;
+		break;
+	case VelocityDirection::vRotation:
+		_currentCube.velocity.rotation = value;
+		break;
+	}
+}
+
+void Game::processVelocity() {
+	while (_currentCube.velocity.left > 0) {
+		moveCubeLeft();
+		--_currentCube.velocity.left;
+	}
+	while (_currentCube.velocity.right > 0) {
+		moveCubeRight();
+		--_currentCube.velocity.right;
+	}
+	while (_currentCube.velocity.down > 0) {
+		moveCubeDown();
+		--_currentCube.velocity.down;
+	}
+	while (_currentCube.velocity.rotation > 0) {
+		rotateCube();
+		--_currentCube.velocity.rotation;
+	}
+
 }

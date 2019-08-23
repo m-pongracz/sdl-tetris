@@ -58,8 +58,10 @@ void Game::mainLoop()
 	const Uint8* keystates = SDL_GetKeyboardState(NULL);
 	Input input = Input(this, keystates);
 
-	int lastElapsedTime = 0;
-	int lastInputTime = 0;
+	int timeToMoveDown = 0;
+	int timeToNextInput = 0;
+	int timeTillSecond = 0;
+	int loops = 0;
 
 	using clock = std::chrono::high_resolution_clock;
 	auto startTime = clock::now();
@@ -82,11 +84,11 @@ void Game::mainLoop()
 			Color pausedColor(255, 255, 255, 255);
 			_renderer->RenderText
 			(
-				_renderer->grid()->GetColumnAt(1, 0), 
+				_renderer->grid()->GetColumnAt(1, 0),
 				"PAUSED",
-				pausedColor, 
-				64, 
-				AlignV::aCenter, 
+				pausedColor,
+				64,
+				AlignV::aCenter,
 				AlignH::aMiddle
 			);
 
@@ -94,26 +96,24 @@ void Game::mainLoop()
 		}
 
 		while (_running) {
-
+			loops++;
 			input.PollDown();
 
 			auto deltaTime = clock::now() - startTime;
 			elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(deltaTime);
 
-			if (elapsedTime.count() >= lastElapsedTime + 1000 - elapsedTime.count() / 10000) {
-				lastElapsedTime = elapsedTime.count();
+			if (elapsedTime.count() >= timeToMoveDown + 1000 - elapsedTime.count() / 10000) {
+				timeToMoveDown = elapsedTime.count();
 
-				moveCubeDown();
+				//moveCubeDown();
 			}
 
-
-
-			if (elapsedTime.count() >= lastInputTime + 100) {
-				lastInputTime = elapsedTime.count();
+			if (elapsedTime.count() >= timeToNextInput + 100) {
+				timeToNextInput = elapsedTime.count();
 				input.PollHold();
-				processVelocity();
-			}
 
+			}
+			processVelocity();
 			std::cout << _score << std::endl;
 
 			const int currCubeXOffset = _currentCube.X();
@@ -133,6 +133,7 @@ void Game::mainLoop()
 
 			if (_renderer != nullptr) {
 				_renderer->Clear();
+				Game::renderInfo(elapsedTime.count(), loops);
 				Game::renderScore();
 				Game::renderGrid();
 				_renderer->Render();
@@ -141,14 +142,38 @@ void Game::mainLoop()
 	}
 }
 
+void Game::renderInfo(int miliseconds, int loops) {
+	Color textColor(255, 0, 0, 255);
+	int seconds = miliseconds / 1000;
+	_renderer->RenderText
+	(
+		_renderer->grid()->GetColumnAt(0, 0),
+		std::to_string(seconds),
+		textColor,
+		64,
+		AlignV::aCenter,
+		AlignH::aMiddle
+	);
+
+	_renderer->RenderText
+	(
+		_renderer->grid()->GetColumnAt(0, 1),
+		std::to_string(seconds > 0 ? loops / seconds : 0),
+		textColor,
+		64,
+		AlignV::aCenter,
+		AlignH::aMiddle
+	);
+}
+
 void Game::renderScore() {
 	Color scoreColor(255, 0, 0, 255);
 	Color scoreBgColor(255, 255, 0, 255);
 
-	_renderer->RenderColor(_renderer->grid()->GetColumnAt(0, 0), scoreBgColor);
+	_renderer->RenderColor(_renderer->grid()->GetColumnAt(1, 0), scoreBgColor);
 	_renderer->RenderText
 	(
-		_renderer->grid()->GetColumnAt(0, 0),
+		_renderer->grid()->GetColumnAt(1, 0),
 		std::to_string(_score),
 		scoreColor,
 		64,
@@ -158,7 +183,7 @@ void Game::renderScore() {
 }
 
 void Game::renderGrid() {
-	_renderer->RenderFrame(_renderer->grid()->GetColumnAt(1, 0), grid);
+	_renderer->RenderFrame(_renderer->grid()->GetColumnAt(2, 0), grid);
 }
 
 void Game::startMainLoop()

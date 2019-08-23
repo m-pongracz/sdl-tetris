@@ -2,6 +2,7 @@
 #define GRIDELEMENT_H
 
 #include "dimensions.h"
+#include "point.h"
 
 enum AlignH { aLeft, aRight, aMiddle };
 enum AlignV { aTop, aBottom, aCenter };
@@ -11,8 +12,10 @@ class GridElement
 {
 protected:
 	Dimensions _dimensions = Dimensions(0, 0);
+	Point _coordinates = Point(0, 0);
 	int _order;
 	int _position;
+
 public:
 	GridElement();
 	~GridElement();
@@ -24,6 +27,7 @@ public:
 	void SetPosition(int position);
 	void SetMargin(int left, int right, int top, int bottom);
 	void SetMargin(int size);
+	void SetCoordiantes(int x, int y);
 
 	auto order() const& -> const int& { return _order; };
 	auto order() & -> const int& { return _order; };
@@ -31,6 +35,8 @@ public:
 	auto position() & -> const int& { return _position; };
 	auto dimensions() const& -> const Dimensions& { return _dimensions; };
 	auto dimensions() & -> const Dimensions& { return _dimensions; };
+	auto coordinates() const& -> const Point& { return _coordinates; };
+	auto coordinates() & -> const Point& { return _coordinates; };
 
 	int marginLeft = 0;
 	int marginRight = 0;

@@ -16,10 +16,13 @@ public:
 	auto rows() const& -> const std::vector<Row*>& { return _rows; };
 	auto rows() & -> const std::vector<Row*>& { return _rows; };
 	void AddRow(Row* row);
-	Point GetColumnPosition(int row, int column);
-	Point GetRowPosition(int row);
+	//Point* GetColumnPosition(int row, int column);
+	//Point GetRowPosition(int row);
 	const Column* GetColumnAt(int row, int column);
 	void RecalculateGrid();
+	void SetRowCoordinates(Row* row);
+	void SetColumnCoordinates(Column* column);
+
 private:
 	int _width;
 	int _height;

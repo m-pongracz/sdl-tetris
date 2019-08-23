@@ -6,8 +6,7 @@
 #include "logging.h"
 #include "SDL_ttf.h"
 #include "res_path.h"
-#include "../UserInterface/point.h"
-#include "../UserInterface/dimensions.h"
+#include "../UserInterface/grid_element.h"
 #include "color.h"
 
 class SdlHelper
@@ -19,11 +18,11 @@ public:
 	void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Point* coords, Dimensions* dimensions, SDL_Rect *clip = nullptr, bool tile = false);
 	void renderText
 	(
-		SDL_Renderer *ren, 
-		Point* coords, 
-		Dimensions* dimensions, 
-		const std::string &message, 
-		Color color, 
+		SDL_Renderer *ren,
+		Point* coords,
+		Dimensions* dimensions,
+		const std::string &message,
+		Color color,
 		int fontSize,
 		AlignV veritcal,
 		AlignH horizontal

@@ -26,24 +26,36 @@ int main(int argc, char * argv[])
 		SDL_Quit();
 	}
 
-	Grid uiGrid = Grid(480, 660);
+	Grid uiGrid = Grid(480, 710);
 
+	Row infoRow = Row(0, 50);
 	Row textRow = Row(0, 100);
 	Row gameRow = Row();
 
+
+	Column fpsColumn = Column(100,0);
+	Column timeColumn = Column();
+
 	Column scoreColumn = Column();
+
 	Column gameColumn = Column();
 
+	
+	infoRow.SetMargin(10);
 	gameRow.SetMargin(10);
 	textRow.SetMargin(10);
 
+	uiGrid.AddRow(&infoRow);
 	uiGrid.AddRow(&textRow);
 	uiGrid.AddRow(&gameRow);
+
+	infoRow.AddColumn(&timeColumn);
+	infoRow.AddColumn(&fpsColumn);
 
 	textRow.AddColumn(&scoreColumn);
 
 	gameRow.AddColumn(&gameColumn);
-	
+
 	uiGrid.RecalculateGrid();
 
 	TetrisRendering *ren = new TetrisRendering(&uiGrid);

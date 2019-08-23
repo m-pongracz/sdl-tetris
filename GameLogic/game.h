@@ -61,6 +61,7 @@ private:
 	void(Game::*_rushDownPtr)();
 	void(Game::*_pausePtr)();
 	void(Game::*_resumePtr)();
+	void renderInfo(int seconds, int loops);
 	void renderGrid();
 	void renderScore();
 	void processVelocity();

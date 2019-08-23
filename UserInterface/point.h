@@ -2,7 +2,7 @@
 #define POINT_H
 
 #include <vector>
-#include "row.h"
+
 class Point
 {
 public:

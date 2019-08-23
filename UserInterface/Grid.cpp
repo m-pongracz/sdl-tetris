@@ -65,74 +65,117 @@ void Grid::RecalculateGrid()
 					(c->marginLeft + c->marginRight)
 				);
 			}
+			SetColumnCoordinates(c);
 		}
+		SetRowCoordinates(r);
 	}
 }
 
-Point Grid::GetColumnPosition(int row, int column) {
+void Grid::SetRowCoordinates(Row* row) {
+	int y = 0;
+	for (int i = 0; i < row->position(); ++i) {
+		auto r = _rows[i];
+		y += r->dimensions().h() + r->marginTop + r->marginBottom;
+	}
+
+	y += row->marginTop;
+	int x = row->marginLeft;
+
+	row->SetCoordiantes(x, y);
+}
+
+void Grid::SetColumnCoordinates(Column* column) {
+	int row = column->rowPosition();
+	Row* r = _rows[row];
+
 	int x = 0;
-	int y = GetRowPosition(row).y;
+	int y = r->coordinates().y;
 	int totalColumnWidth = 0;
 
-	Row* r = _rows[row];
+
 
 	x += r->marginLeft;
 
-	Column* c = r->columns()[column];
-
-	y += c->marginTop;
+	y += column->marginTop;
 
 	for (int i = 0; i < r->columns().size(); ++i) {
 		Column* ci = r->columns()[i];
 		totalColumnWidth += ci->dimensions().w();
-		if (column != 0 && i < column) {
+		if (column->position() != 0 && i < column->position()) {
 			x += ci->dimensions().w() + ci->marginLeft;
 		}
 	}
 
-	x += c->marginLeft;
+	x += column->marginLeft;
 
-	//x += getAlignMargin(c);
-
-	return Point(x, y);
+	column->SetCoordiantes(x, y);
 }
 
-//int Grid::getAlignMargin(Column* column) {
+//
+//Point* Grid::GetColumnPosition(int row, int column) {
+//	int x = 0;
+//	int y = GetRowPosition(row).y;
 //	int totalColumnWidth = 0;
 //
-//	Row* r = _rows[column->rowPosition()];
-//	Column* c = r->columns()[column->position()];
+//	Row* r = _rows[row];
+//
+//	x += r->marginLeft;
+//
+//	Column* c = r->columns()[column];
+//
+//	y += c->marginTop;
 //
 //	for (int i = 0; i < r->columns().size(); ++i) {
 //		Column* ci = r->columns()[i];
 //		totalColumnWidth += ci->dimensions().w();
+//		if (column != 0 && i < column) {
+//			x += ci->dimensions().w() + ci->marginLeft;
+//		}
 //	}
 //
-//	if (c->align == Align::center) {
-//		return ((r->dimensions().w() - totalColumnWidth) / 2) / r->columns().size();
-//	}
-//	else if (c->align == Align::right) {
-//		return ((r->dimensions().w() - totalColumnWidth) / r->columns().size());
-//	}
-//	else {
-//		return 0;
-//	}
+//	x += c->marginLeft;
+//
+//	//x += getAlignMargin(c);
+//
+//	return new Point(x, y);
 //}
-
-Point Grid::GetRowPosition(int row) {
-
-	int y = 0;
-	for (int i = 0; i < row; ++i) {
-		auto r = _rows[i];
-		y += r->dimensions().h() + r->marginTop + r->marginBottom;
-	}
-	auto r = _rows[row];
-
-	y += r->marginTop;
-	int x = r->marginLeft;
-
-	return Point(x, y);
-}
+//
+////int Grid::getAlignMargin(Column* column) {
+////	int totalColumnWidth = 0;
+////
+////	Row* r = _rows[column->rowPosition()];
+////	Column* c = r->columns()[column->position()];
+////
+////	for (int i = 0; i < r->columns().size(); ++i) {
+////		Column* ci = r->columns()[i];
+////		totalColumnWidth += ci->dimensions().w();
+////	}
+////
+////	if (c->align == Align::center) {
+////		return ((r->dimensions().w() - totalColumnWidth) / 2) / r->columns().size();
+////	}
+////	else if (c->align == Align::right) {
+////		return ((r->dimensions().w() - totalColumnWidth) / r->columns().size());
+////	}
+////	else {
+////		return 0;
+////	}
+////}
+//
+//Point Grid::GetRowPosition(int row) {
+//
+//	int y = 0;
+//	for (int i = 0; i < row; ++i) {
+//		auto r = _rows[i];
+//		y += r->dimensions().h() + r->marginTop + r->marginBottom;
+//	}
+//	auto r = _rows[row];
+//
+//	y += r->marginTop;
+//	int x = r->marginLeft;
+//
+//	return Point(x, y);
+//}
 
 const Column* Grid::GetColumnAt(int row, int column) {
 	return _rows[row]->columns()[column];

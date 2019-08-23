@@ -71,8 +71,8 @@ TetrisRendering::TetrisRendering(Grid* grid)
 
 void TetrisRendering::RenderFrame(const Column* column, std::vector<std::vector<bool>> grid) {
 
-	auto gamePos = _grid->GetColumnPosition(column->rowPosition(), column->position());
-	auto gameDimensions = Dimensions(column->dimensions().w(), column->dimensions().h());
+	auto gamePos = column->coordinates();
+	auto gameDimensions = column->dimensions();
 
 	int cubeW = gameDimensions.w() / Game::gridWidth;
 	int cubeH = gameDimensions.h() / Game::gridHeight;
@@ -101,19 +101,24 @@ void TetrisRendering::RenderText
 	AlignH horizontal
 )
 {
-	auto textPos = _grid->GetColumnPosition(column->rowPosition(), column->position());
-	auto textDimensions = Dimensions(column->dimensions().w(), column->dimensions().h());
+	Point textPos = column->coordinates();
+	Dimensions textDimensions = column->dimensions();
 
 	sdlHelper_->renderText(ren, &textPos, &textDimensions, message, color, fontSize, vertical, horizontal);
 
+	//delete textPos;
+	//delete textDimensions;
 }
 
 void TetrisRendering::RenderColor(const Column* column, Color color)
 {
-	auto gamePos = _grid->GetColumnPosition(column->rowPosition(), column->position());
-	auto gameDimensions = Dimensions(column->dimensions().w(), column->dimensions().h());
+	Point gamePos = column->coordinates();
+	Dimensions gameDimensions = column->dimensions();
 
 	sdlHelper_->renderColor(ren, &gamePos, &gameDimensions, color);
+
+	//delete gamePos;
+	//delete gameDimensions;
 }
 
 void TetrisRendering::Clear() {

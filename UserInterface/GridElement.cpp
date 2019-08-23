@@ -2,10 +2,9 @@
 
 GridElement::GridElement()
 {
-	_dimensions = Dimensions(0, 0);
 }
 
-GridElement::GridElement(int width, int height)
+GridElement::GridElement(int width = 0, int height = 0)
 {
 	_dimensions = Dimensions(width, height);
 }
@@ -41,3 +40,7 @@ GridElement::~GridElement()
 {
 }
 
+void GridElement::SetCoordiantes(int x, int y) {
+	_coordinates.x = x;
+	_coordinates.y = y;
+}

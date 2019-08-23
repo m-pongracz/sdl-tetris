@@ -113,10 +113,12 @@ void SdlHelper::renderText(SDL_Renderer *ren, Point* coords, Dimensions* dimensi
 		break;
 	}
 	}
-
+	
 	renderTexture(texture, ren, alignedCoords, new Dimensions(w, h));
 
 	SDL_FreeSurface(surf);
+
+
 }
 
 void SdlHelper::renderColor(SDL_Renderer *ren, Point* coords, Dimensions* dimensions, Color color)

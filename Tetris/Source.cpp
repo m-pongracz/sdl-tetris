@@ -5,7 +5,7 @@
 #include "../TetrisRendering/tetris_rendering.h"
 #include "../GameLogic/game.h"
 //#include "../TetrisRendering/logging.h"
-
+#include "../UserInterface/grid.h"
 using namespace std;
 
 

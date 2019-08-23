@@ -5,9 +5,9 @@
 #include <vector>
 #include "res_path.h"
 #include "color.h"
-#include "grid.h"
-#include "dimensions.h"
-#include "column.h"
+#include "../UserInterface/grid.h"
+#include "../UserInterface/dimensions.h"
+#include "../UserInterface/column.h"
 
 class TetrisRendering
 {

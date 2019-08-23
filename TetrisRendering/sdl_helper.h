@@ -6,8 +6,8 @@
 #include "logging.h"
 #include "SDL_ttf.h"
 #include "res_path.h"
-#include "point.h"
-#include "dimensions.h"
+#include "../UserInterface/point.h"
+#include "../UserInterface/dimensions.h"
 #include "color.h"
 
 class SdlHelper

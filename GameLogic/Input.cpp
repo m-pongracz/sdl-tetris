@@ -13,7 +13,7 @@ void Input::PollDown()
 	updateStates();
 
 	bool(Input::*keyPressTypePtr)(int);
-	keyPressTypePtr = &Input::key;
+	keyPressTypePtr = &Input::keyPressed;
 
 	pollByPressType(keyPressTypePtr);
 	if ((this->*keyPressTypePtr)(SDL_SCANCODE_SPACE))
@@ -27,7 +27,7 @@ void Input::PollHold()
 	//updateStates();
 
 	bool(Input::*keyPressTypePtr)(int);
-	keyPressTypePtr = &Input::key;
+	keyPressTypePtr = &Input::keyHeld;
 
 	pollByPressType(keyPressTypePtr);
 }

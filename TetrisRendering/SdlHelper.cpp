@@ -55,7 +55,7 @@ void SdlHelper::renderTexture(SDL_Texture* tex, SDL_Renderer* ren, Point* coords
 		SDL_RenderCopy(ren, tex, clip, &dst);
 	}
 
-	SDL_DestroyTexture(tex);
+	//SDL_DestroyTexture(tex);
 }
 
 void SdlHelper::renderTexture(SDL_Texture* tex, SDL_Renderer* ren, Point* coords, SDL_Rect* clip, bool tile) {

@@ -65,5 +65,6 @@ private:
 	void renderGrid();
 	void renderScore();
 	void processVelocity();
+	void updateGrid();
 };
 #endif

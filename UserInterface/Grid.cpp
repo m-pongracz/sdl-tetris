@@ -44,12 +44,14 @@ void Grid::RecalculateGrid()
 		int staticColumnWidth = 0;
 		int staticColumns = 0;
 
+		SetRowCoordinates(r);
+
 		for (auto c : r->columns()) {
 			if (c->dimensions().w() != 0) {
 				++staticColumns;
 				staticColumnWidth += c->dimensions().w() + c->marginLeft + c->marginRight;
 			}
-		}
+		}		
 
 		for (auto c : r->columns()) {
 
@@ -66,8 +68,7 @@ void Grid::RecalculateGrid()
 				);
 			}
 			SetColumnCoordinates(c);
-		}
-		SetRowCoordinates(r);
+		}		
 	}
 }
 

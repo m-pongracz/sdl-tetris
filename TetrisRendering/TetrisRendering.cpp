@@ -82,8 +82,10 @@ void TetrisRendering::RenderFrame(const Column* column, std::vector<std::vector<
 			Point cubeCoords = Point(gamePos.x + x * cubeW, gamePos.y + y * cubeH);
 			Dimensions cubeDimensions = Dimensions(cubeW, cubeH);
 
-			sdlHelper_->renderTexture(gridBox, ren, &cubeCoords, &cubeDimensions);
-			if (grid[y][x] == true) {
+			if (grid[y][x] == false) {
+				sdlHelper_->renderTexture(gridBox, ren, &cubeCoords, &cubeDimensions);
+			}
+			else {
 				sdlHelper_->renderTexture(cube, ren, &cubeCoords, &cubeDimensions);
 			}
 		}

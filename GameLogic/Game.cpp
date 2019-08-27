@@ -51,6 +51,10 @@ void Game::getNextCube()
 	if (cubeOnNewPosition(_currentCube)) {
 		_running = false;
 	}
+
+	Game::renderScore();
+
+	updateGrid();
 }
 
 void Game::mainLoop()
@@ -74,17 +78,18 @@ void Game::mainLoop()
 		//	_resumePtr
 		//);
 
+		bool wasPaused = true;
+
 		if (_renderer != nullptr) {
-			_renderer->Clear();
-			Game::renderScore();
+
 			Game::renderGrid();
 
 			Color overlayColor(0, 0, 0, 127);
-			_renderer->RenderColor(_renderer->grid()->GetColumnAt(1, 0), overlayColor);
+			_renderer->RenderColor(_renderer->grid()->GetColumnAt(2, 0), overlayColor);
 			Color pausedColor(255, 255, 255, 255);
 			_renderer->RenderText
 			(
-				_renderer->grid()->GetColumnAt(1, 0),
+				_renderer->grid()->GetColumnAt(2, 0),
 				"PAUSED",
 				pausedColor,
 				64,
@@ -96,6 +101,13 @@ void Game::mainLoop()
 		}
 
 		while (_running) {
+
+			if (wasPaused) {
+				renderGrid();
+			}
+
+			wasPaused = false;
+
 			loops++;
 			input.PollDown();
 
@@ -111,39 +123,47 @@ void Game::mainLoop()
 			if (elapsedTime.count() >= timeToNextInput + 100) {
 				timeToNextInput = elapsedTime.count();
 				input.PollHold();
-
 			}
+
 			processVelocity();
 			std::cout << _score << std::endl;
 
-			const int currCubeXOffset = _currentCube.X();
-			const int currCubeYOffset = _currentCube.Y();
-
-			for (int y = 0; y < _currentCube.Footprint().size(); y++) {
-				for (int x = 0; x < _currentCube.Footprint()[0].size(); x++) {
-
-					bool nextGridVal = false;
-					//if footprint is true -> imprint true on grid according to footprint + its x,y offset
-					if (_currentCube.Footprint()[y][x] == true) {
-						nextGridVal = true;
-						grid[y + currCubeYOffset][x + currCubeXOffset] = nextGridVal;
-					}
-				}
-			}
-
 			if (_renderer != nullptr) {
-				_renderer->Clear();
+				//_renderer->Clear();
 				Game::renderInfo(elapsedTime.count(), loops);
-				Game::renderScore();
-				Game::renderGrid();
+				
 				_renderer->Render();
 			}
 		}
 	}
 }
 
+void Game::updateGrid() {
+	const int currCubeXOffset = _currentCube.X();
+	const int currCubeYOffset = _currentCube.Y();
+
+	for (int y = 0; y < _currentCube.Footprint().size(); y++) {
+		for (int x = 0; x < _currentCube.Footprint()[0].size(); x++) {
+
+			bool nextGridVal = false;
+			//if footprint is true -> imprint true on grid according to footprint + its x,y offset
+			if (_currentCube.Footprint()[y][x] == true) {
+				nextGridVal = true;
+				grid[y + currCubeYOffset][x + currCubeXOffset] = nextGridVal;
+			}
+		}
+	}
+
+	renderGrid();
+}
+
 void Game::renderInfo(int miliseconds, int loops) {
 	Color textColor(255, 0, 0, 255);
+	Color scoreBgColor(0, 0, 0, 255);
+
+	_renderer->RenderColor(_renderer->grid()->GetColumnAt(0, 0), scoreBgColor);
+	_renderer->RenderColor(_renderer->grid()->GetColumnAt(0, 1), scoreBgColor);
+
 	int seconds = miliseconds / 1000;
 	_renderer->RenderText
 	(
@@ -256,6 +276,8 @@ void Game::moveCubeDown() {
 		deleteCompleteRows();
 		getNextCube();
 	}
+
+	updateGrid();
 }
 
 void Game::moveCubeLeft() {
@@ -277,6 +299,8 @@ void Game::moveCubeLeft() {
 
 		_currentCube.MoveL();
 	}
+
+	updateGrid();
 }
 
 void Game::moveCubeRight() {
@@ -298,6 +322,8 @@ void Game::moveCubeRight() {
 
 		_currentCube.MoveR();
 	}
+
+	updateGrid();
 }
 
 void Game::rotateCube() {
@@ -318,6 +344,8 @@ void Game::rotateCube() {
 	}
 
 	_currentCube.RotateCCW();
+
+	updateGrid();
 }
 
 void Game::rushCubeDown() {
@@ -430,6 +458,8 @@ void Game::deleteCompleteRows() {
 			//move y pos pointer one pos down again because of the row shift
 			y++;
 			if (_currentCube.X() != 0) _currentCube.setX(_currentCube.X() - 1);
+
+			Game::renderScore();
 		}
 	}
 }
